@@ -16,7 +16,7 @@ class MyHttpDecoder extends NetDecoder {
     var errorCode = response.data['code'];
 
     /// 请求成功
-    if (errorCode == 200) {
+    if (errorCode == 0) {
       var data = response.data['data'];
       if (decodeType is BaseNetModel) {
         if (data is List) {
@@ -31,7 +31,7 @@ class MyHttpDecoder extends NetDecoder {
         return data as K;
       }
     } else {
-      var errorMsg = response.data['messages'];
+      var errorMsg = response.data['message'];
       throw NetException(errorMsg, errorCode);
     }
   }

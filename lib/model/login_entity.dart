@@ -7,9 +7,8 @@ export 'package:digital_train/generated/json/login_entity.g.dart';
 
 @JsonSerializable()
 class LoginEntity extends BaseNetModel {
-	late String accessToken;
-	late int accessExpire;
-	late int refreshAfter;
+	late String token;
+	late String authId;
 
 	LoginEntity();
 

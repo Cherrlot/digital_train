@@ -1,15 +1,12 @@
-import 'dart:convert';
-
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:crypto/crypto.dart';
+
 import '../model/login_entity.dart';
 import '../net/net_util.dart';
 import '../net/url_cons.dart';
-import '../util/ToastNotification.dart';
 import '../util/constant.dart';
 import '../util/sp_util.dart';
 
@@ -21,9 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FToast ftoast = FToast();
-  late ToastNotification toast;
-
   late VoidCallback _buttonCallback;
   late TextEditingController accountController;
   late TextEditingController pwdController;
@@ -32,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    toast = ToastNotification(ftoast.init(context));
 
     _buttonCallback = () {
       setState(() {
@@ -54,27 +47,30 @@ class _LoginPageState extends State<LoginPage> {
     String account = accountController.value.text;
     String pwd = pwdController.value.text;
     if (account.isEmpty) {
-      toast.warn('请输入账号');
+      BotToast.showText(text: '请输入账号');
       return;
     }
     if (pwd.isEmpty) {
-      toast.warn('请输入密码');
+      BotToast.showText(text: '请输入密码');
       return;
     }
     if (!checked) {
-      toast.warn('请同意用户协议和隐私政策');
+      BotToast.showText(text: '请同意用户协议和隐私政策');
       return;
     }
+
+    /// 登录
+    var cancel = BotToast.showLoading();
     await SpUtil.getInstance();
     var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
-        decodeType: LoginEntity(),
-        data: {"identifier": account, "credential": md5.convert(utf8.encode(pwd)).toString(), "loginType": "password"});
+        decodeType: LoginEntity(), data: {"identifier": account, "credential": pwd});
     appResponse.when(success: (LoginEntity model) {
-      var token = model.accessToken;
+      var token = model.token;
       NetDioUtil.initOptionWithToken(token);
       SpUtil.setString(Constants.token, token);
+      cancel();
     }, failure: (String msg, int code) {
-      toast.warn('登录失败，$msg/code=$code');
+      cancel();
     });
   }
 
