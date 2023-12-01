@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_nb_net/flutter_net.dart';
 
 /// 默认解码器
@@ -13,11 +15,12 @@ class MyHttpDecoder extends NetDecoder {
 
   @override
   K decode<T, K>({required Response<dynamic> response,  T? decodeType}) {
-    var errorCode = response.data['code'];
+    var json = jsonDecode(response.data);
+    var errorCode = json['result'];
 
     /// 请求成功
-    if (errorCode == 0) {
-      var data = response.data['data'];
+    if (errorCode != null) {
+      var data = json['result'];
       if (decodeType is BaseNetModel) {
         if (data is List) {
           var dataList = List<T>.from(
@@ -31,8 +34,29 @@ class MyHttpDecoder extends NetDecoder {
         return data as K;
       }
     } else {
-      var errorMsg = response.data['message'];
+      var errorMsg = json['message'];
       throw NetException(errorMsg, errorCode);
     }
+    // var errorCode = json['code'];
+    //
+    // /// 请求成功
+    // if (errorCode == 0) {
+    //   var data = json['data'];
+    //   if (decodeType is BaseNetModel) {
+    //     if (data is List) {
+    //       var dataList = List<T>.from(
+    //           data.map((item) => decodeType.fromJson(item)).toList()) as K;
+    //       return dataList;
+    //     } else {
+    //       var model = decodeType.fromJson(data) as K;
+    //       return model;
+    //     }
+    //   } else {
+    //     return data as K;
+    //   }
+    // } else {
+    //   var errorMsg = json['message'];
+    //   throw NetException(errorMsg, errorCode);
+    // }
   }
 }

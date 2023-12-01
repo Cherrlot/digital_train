@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../net/net_util.dart';
 import '../util/sp_util.dart';
-import 'HomePage.dart';
+import 'HomeNavigationPage.dart';
 import 'LoginPage.dart';
 
 /// 闪屏页。
@@ -42,7 +42,7 @@ class _SplashPageState extends State<SplashPage> {
       } else {
         // 跳转主界面
         NetDioUtil.initOptionWithToken(token);
-        child = const HomePage();
+        child = const HomeNavigationPage();
       }
     });
   }

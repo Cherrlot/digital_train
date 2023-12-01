@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // 错误页面
 class ErrorPage extends StatefulWidget {
@@ -29,16 +30,16 @@ class _ErrorPageState extends State<ErrorPage> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: Icon(Icons.error, color: Colors.red, size: 66),
+              child: Icon(Icons.error, color: Colors.red, size: 66.w),
             ),
             SelectableText(
               widget.errorText,
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(fontSize: 22.sp),
             ),
           ],
         ),

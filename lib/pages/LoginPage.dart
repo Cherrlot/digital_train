@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:crypto/crypto.dart';
 
 import '../model/login_entity.dart';
 import '../net/net_util.dart';
 import '../net/url_cons.dart';
+import '../routes/route_name.dart';
 import '../util/constant.dart';
 import '../util/sp_util.dart';
 
@@ -63,12 +67,20 @@ class _LoginPageState extends State<LoginPage> {
     var cancel = BotToast.showLoading();
     await SpUtil.getInstance();
     var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
-        decodeType: LoginEntity(), data: {"identifier": account, "credential": pwd});
+    // var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
+        decodeType: LoginEntity(),
+        // data: {"identifier": account, "credential": md5.convert(utf8.encode(pwd)).toString(), "loginType": "password"}
+        data: {"account": account, "pwd": pwd}
+        // data: {"identifier": account, "credential": pwd}
+    );
+    // appResponse.when(success: (List<LoginEntity> model) {
     appResponse.when(success: (LoginEntity model) {
       var token = model.token;
+    //   var token = model[0].token;
       NetDioUtil.initOptionWithToken(token);
       SpUtil.setString(Constants.token, token);
       cancel();
+      Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
     }, failure: (String msg, int code) {
       cancel();
     });
@@ -127,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Widget buildTopWidget() {
+  Widget buildTopWidget() {
   return Text(
     '您好，欢迎登录',
     style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w800),

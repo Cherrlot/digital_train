@@ -9,6 +9,7 @@ export 'package:digital_train/generated/json/login_entity.g.dart';
 class LoginEntity extends BaseNetModel {
 	late String token;
 	late String authId;
+	late String accessToken;
 
 	LoginEntity();
 
