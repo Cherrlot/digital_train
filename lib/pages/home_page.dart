@@ -3,7 +3,6 @@ import 'package:digital_train/util/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loadmore/loadmore.dart';
 
 import '../model/machine_entity.dart';
 import '../net/url_cons.dart';
@@ -21,18 +20,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> imageList = List.empty(growable: true); //图片地址
   List<String> titleList = List.empty(growable: true); //标题集合
-
-  int get count => list.length;
-
-  List<MachineEntity> list = [];
-
-  int pageNum = 0;
+  List<MachineEntity> model = [];
 
   @override
   void initState() {
     super.initState();
     _getBannerData();
-    load();
+    _loadLessons();
   }
 
   Future _getBannerData() async {
@@ -70,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       height: double.infinity,
       decoration: const BoxDecoration(
           gradient: LinearGradient(
-        colors: [Color(ColorConstant.colorF1F6FF), Color(ColorConstant.colorF6F7F9)], //背景渐变色
+        colors: [ColorConstant.colorF1F6FF, ColorConstant.colorF6F7F9], //背景渐变色
         begin: Alignment.topCenter, //颜色渐变从顶部居中开始
         end: Alignment.bottomCenter, //颜色渐变从底部居中结束
       )),
@@ -106,9 +100,16 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(15.w), topRight: Radius.circular(15.w))),
       child: Column(
-        children: [_showMore(), _typeGrid(),
-          // _lessonGrid()
-        ],
+        children: [
+          _showMore(),
+          SizedBox(
+            height: 10.w,
+          ),
+          _typeGrid(),
+          SizedBox(
+            height: 10.w,
+          ),
+          _lessonGrid()],
       ),
     ));
   }
@@ -121,62 +122,78 @@ class _HomePageState extends State<HomePage> {
         child: GridView.extent(
           shrinkWrap: true,
           maxCrossAxisExtent: 110.w,
-          childAspectRatio: 5,
+          crossAxisSpacing: 10.w,
+          mainAxisSpacing: 10.w,
+          childAspectRatio: 4,
           children: titleList
-              .map((e) => Text(
-            e,
-            maxLines: 1,
-            style: TextStyle(fontSize: 13.sp, color: const Color(ColorConstant.color999999)),
-          ))
+              .map((e) => Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.fromLTRB(5.w, 3.w, 5.w, 3.w),
+              decoration: BoxDecoration(
+                  color: ColorConstant.colorF6F6F6,
+                  borderRadius: BorderRadius.all(Radius.circular(15.w))),
+              child:Text(
+                    e,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
+                  )))
               .toList(),
         ));
   }
 
-  // Widget _lessonGrid() {
-  //   return Expanded(
-  //     child: RefreshIndicator(
-  //         onRefresh: _refresh,
-  //         child: LoadMore(
-  //           // isFinish: count >= 60,
-  //           onLoadMore: _loadMore,
-  //           // whenEmptyLoad: true,
-  //           delegate: const DefaultLoadMoreDelegate(),
-  //           textBuilder: DefaultLoadMoreTextBuilder.chinese,
-  //           child: ListView.builder(
-  //             shrinkWrap: true,
-  //             itemBuilder: (BuildContext context, int index) {
-  //               return Text(
-  //                 list[index].category,
-  //                 maxLines: 1,
-  //                 style: TextStyle(fontSize: 13.sp, color: const Color(ColorConstant.color999999)),
-  //               );
-  //             },
-  //             itemCount: count,
-  //           ),
-  //         )),
-  //   );
-  // }
-
-  Future<bool> _loadMore() async {
-    pageNum++;
-    BotToast.showText(text: '查看更多$pageNum');
-    load();
-    return true;
+  Widget _lessonGrid() {
+    return Expanded(
+      child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child:GridView.count(
+        shrinkWrap: true,
+        crossAxisSpacing: 6.w,
+        crossAxisCount: 2,
+        children: model.map((e) => _lessonItem(e)).toList(),
+      )),
+    );
   }
 
-  Future<void> _refresh() async {
-    pageNum = 0;
-    BotToast.showText(text: '刷新$pageNum');
-    load();
+  Widget _lessonItem(MachineEntity data) {
+    return Column(
+      children: [
+        GestureDetector(
+            onTap: () {
+              BotToast.showText(text: '查看课程${data.category}');
+            },
+            child:FadeInImage(
+            fit: BoxFit.cover,
+            placeholderFit: BoxFit.cover,
+            placeholder: const AssetImage(ImageConstant.imageLessonDefault),
+            image: NetworkImage(data.descr),
+            placeholderErrorBuilder: (ctx, err, stackTrace) =>
+                Image.asset(ImageConstant.imageLessonDefault, fit: BoxFit.cover),
+            imageErrorBuilder: (ctx, err, stackTrace) => Image.asset(ImageConstant.imageLessonDefault, fit: BoxFit.cover))),
+        Text(
+          data.category,
+          maxLines: 1,
+          style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
+        )
+      ],
+    );
   }
 
-  Future<void> load() async {
+  _loadLessons() async {
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(
         success: (List<MachineEntity> model) {
+          for (var i = 0; i < model.length; i++) {
+            if (i % 2 == 0) {
+              model[i].descr = ("https://www.vipandroid.cn/ming/image/gan.png");
+            } else {
+              model[i].descr = ("");
+            }
+          }
+
           setState(() {
-            list.addAll(model);
+            this.model.addAll(model);
           });
         },
         failure: (String msg, int code) {});
@@ -187,7 +204,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         Text(
           '学习地图',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: const Color(ColorConstant.color212121)),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: ColorConstant.color212121),
         ),
         Expanded(
             child: GestureDetector(
@@ -200,11 +217,11 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       '查看更多',
-                      style: TextStyle(fontSize: 13.sp, color: const Color(ColorConstant.color999999)),
+                      style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
                     ),
                     const Icon(
                       Icons.arrow_forward_ios,
-                      color: Color(ColorConstant.color999999),
+                      color: ColorConstant.color999999,
                     ),
                   ],
                 )))

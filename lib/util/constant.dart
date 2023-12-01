@@ -13,4 +13,6 @@ class Constants {
 
   static const Color warnBgColor = Color.fromRGBO(255, 251, 235, 1);
   static const Color warnTextColor = Color.fromRGBO(180, 83, 9, 1);
+
+  static const PAGE_SIZE = 20;
 }
