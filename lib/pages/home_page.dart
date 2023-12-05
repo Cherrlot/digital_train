@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:digital_train/util/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
@@ -33,31 +34,29 @@ class _HomePageState extends State<HomePage> {
   Future _getBannerData() async {
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(
-        success: (List<MachineEntity> model) {
-          List<String> imageList = List.empty(growable: true); //图片地址
-          List<String> titleList = List.empty(growable: true); //标题集合
-          var i = 0;
-          for (var element in model) {
-            if (i >= 4) {
-              break;
-            }
-            titleList.add(element.category);
-            if (i / 2 == 0) {
-              imageList.add("https://www.vipandroid.cn/ming/image/gan.png");
-            } else {
-              imageList.add("https://www.vipandroid.cn/ming/image/zao.png");
-            }
-            i++;
-          }
-          setState(() {
-            this.imageList.addAll(imageList);
-            this.titleList.addAll(titleList);
-          });
-        },
-        failure: (String msg, int code) {
-          debugPrint("$msg, code: $code");
-        });
+    appResponse.when(success: (List<MachineEntity> model) {
+      List<String> imageList = List.empty(growable: true); //图片地址
+      List<String> titleList = List.empty(growable: true); //标题集合
+      var i = 0;
+      for (var element in model) {
+        if (i >= 4) {
+          break;
+        }
+        titleList.add(element.category);
+        if (i / 2 == 0) {
+          imageList.add("https://www.vipandroid.cn/ming/image/gan.png");
+        } else {
+          imageList.add("https://www.vipandroid.cn/ming/image/zao.png");
+        }
+        i++;
+      }
+      setState(() {
+        this.imageList.addAll(imageList);
+        this.titleList.addAll(titleList);
+      });
+    }, failure: (String msg, int code) {
+      debugPrint("$msg, code: $code");
+    });
   }
 
   @override
@@ -112,7 +111,8 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 10.w,
           ),
-          _lessonGrid()],
+          _lessonGrid()
+        ],
       ),
     ));
   }
@@ -130,12 +130,11 @@ class _HomePageState extends State<HomePage> {
           childAspectRatio: 4,
           children: titleList
               .map((e) => Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.fromLTRB(5.w, 3.w, 5.w, 3.w),
-              decoration: BoxDecoration(
-                  color: ColorConstant.colorF6F6F6,
-                  borderRadius: BorderRadius.all(Radius.circular(15.w))),
-              child:Text(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.fromLTRB(5.w, 3.w, 5.w, 3.w),
+                  decoration: BoxDecoration(
+                      color: ColorConstant.colorF6F6F6, borderRadius: BorderRadius.all(Radius.circular(15.w))),
+                  child: Text(
                     e,
                     maxLines: 1,
                     style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
@@ -149,13 +148,17 @@ class _HomePageState extends State<HomePage> {
       child: MediaQuery.removePadding(
           context: context,
           removeTop: true,
-          child:GridView.count(
-        shrinkWrap: true,
-        crossAxisSpacing: 6.w,
-        crossAxisCount: 2,
-        children: model.map((e) => _lessonItem(e)).toList(),
-      )),
+          child: GridView.count(
+            shrinkWrap: true,
+            crossAxisSpacing: 6.w,
+            crossAxisCount: 2,
+            children: model.map((e) => _lessonItem(e)).toList(),
+          )),
     );
+  }
+
+  Widget _defaultImage() {
+    return const Image(image: AssetImage(ImageConstant.imageLessonDefault), fit: BoxFit.cover);
   }
 
   Widget _lessonItem(MachineEntity data) {
@@ -165,14 +168,12 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               BotToast.showText(text: '查看课程${data.category}');
             },
-            child:FadeInImage(
-            fit: BoxFit.cover,
-            placeholderFit: BoxFit.cover,
-            placeholder: const AssetImage(ImageConstant.imageLessonDefault),
-            image: NetworkImage(data.descr),
-            placeholderErrorBuilder: (ctx, err, stackTrace) =>
-                Image.asset(ImageConstant.imageLessonDefault, fit: BoxFit.cover),
-            imageErrorBuilder: (ctx, err, stackTrace) => Image.asset(ImageConstant.imageLessonDefault, fit: BoxFit.cover))),
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              imageUrl: data.descr,
+              placeholder: (context, url) => _defaultImage(),
+              errorWidget: (context, url, error) => _defaultImage(),
+            )),
         Text(
           data.category,
           maxLines: 1,
@@ -185,23 +186,21 @@ class _HomePageState extends State<HomePage> {
   _loadLessons() async {
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(
-        success: (List<MachineEntity> model) {
-          for (var i = 0; i < model.length; i++) {
-            if (i % 2 == 0) {
-              model[i].descr = ("https://www.vipandroid.cn/ming/image/gan.png");
-            } else {
-              model[i].descr = ("");
-            }
-          }
+    appResponse.when(success: (List<MachineEntity> model) {
+      for (var i = 0; i < model.length; i++) {
+        if (i % 2 == 0) {
+          model[i].descr = ("https://www.vipandroid.cn/ming/image/gan.png");
+        } else {
+          model[i].descr = ("");
+        }
+      }
 
-          setState(() {
-            this.model.addAll(model);
-          });
-        },
-        failure: (String msg, int code) {
-          debugPrint("$msg, code: $code");
-        });
+      setState(() {
+        this.model.addAll(model);
+      });
+    }, failure: (String msg, int code) {
+      debugPrint("$msg, code: $code");
+    });
   }
 
   Widget _showMore() {

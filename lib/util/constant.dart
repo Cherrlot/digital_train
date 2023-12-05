@@ -2,6 +2,13 @@ import 'dart:ui';
 
 class Constants {
   static const String token = 'token';
+  static const String userName = 'userName';
+  static const String headUrl = 'headUrl';
+  static const String userDepart = 'userDepart';
+  static const String userPhone = 'userPhone';
+
+
+
   static const Color successBgColor = Color.fromRGBO(202, 237, 220, 1);
   static const Color successTextColor = Color.fromRGBO(6, 95, 70, 1);
 

@@ -68,15 +68,15 @@ class _MessagePageState extends State<MessagePage> {
           BotToast.showText(text: '打开消息详情 ${data.category}');
         },
         child: Container(
-          padding: EdgeInsets.all(5.w),
-          margin: EdgeInsets.fromLTRB(15.w, 5.w, 15.w, 5.w),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(15.w))),
+          padding: EdgeInsets.fromLTRB(9.w, 10.w, 9.w, 10.w),
+          margin: EdgeInsets.fromLTRB(14.w, 5.w, 14.w, 5.w),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Row(
             children: [
               Image(
-                image: const AssetImage(ImageConstant.imageMap),
-                width: 50.w,
-                height: 50.w,
+                image: const AssetImage(ImageConstant.imageMsgHead),
+                width: 28.w,
+                height: 28.w,
               ),
               SizedBox(
                 width: 10.w,
@@ -90,6 +90,9 @@ class _MessagePageState extends State<MessagePage> {
                     data.category,
                     maxLines: 1,
                     style: TextStyle(fontSize: 16.sp, color: ColorConstant.mainTextColor),
+                  ),
+                  SizedBox(
+                    height: 7.w,
                   ),
                   Text(
                     textAlign: TextAlign.left,

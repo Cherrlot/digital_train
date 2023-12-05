@@ -8,5 +8,8 @@ class StringConstant {
   static const String load_more_text = "正在加载更多";
   static const String load_more_not = "没有更多数据";
   static const String message = "消息";
+  static const String mine = "个人中心";
+  static const String feed = "意见反馈";
+  static const String setting = "设置";
 
 }

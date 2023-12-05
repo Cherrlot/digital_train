@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:digital_train/widget/vip_text.dart';
 import 'package:flutter/material.dart';
 
@@ -298,14 +299,11 @@ class _CarouselState extends State<VipBanner> with WidgetsBindingObserver {
         fit: widget.imageBoxFit,
       );
     } else {
-      return FadeInImage(
+      return CachedNetworkImage(
           fit: widget.imageBoxFit,
-          placeholderFit: widget.imageBoxFit,
-          placeholder: getPlaceholder(),
-          image: NetworkImage(imageUrl),
-          placeholderErrorBuilder: (ctx, err, stackTrace) =>
-              _imagePlaceholder(),
-          imageErrorBuilder: (ctx, err, stackTrace) => _imageError());
+          placeholder: (context, url) => _imagePlaceholder(),
+          imageUrl: imageUrl,
+          errorWidget: (context, url, error) =>  _imageError());
     }
   }
 

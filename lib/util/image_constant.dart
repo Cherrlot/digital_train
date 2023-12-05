@@ -14,6 +14,12 @@ class ImageConstant {
   static const String imageKnowledge = "asset/images/ic_knowledge.png";
   static const String imageNoData = "asset/images/ic_nodata.png";
   static const String imageLessonDefault = "asset/images/ic_lession_default.png";
+  static const String imageMsgHead = "asset/images/ic_msg_head.png";
+  static const String imageHeadDefault = "asset/images/ic_head_default.png";
+  static const String imageFeed = "asset/images/ic_feed.png";
+  static const String imageSetting = "asset/images/ic_setting.png";
+  static const String imageBackMine = "asset/images/ic_back_mine.png";
+  static const String imageMineBack = "asset/images/ic_mine_back.png";
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;
