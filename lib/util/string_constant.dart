@@ -7,5 +7,6 @@ class StringConstant {
   static const String app_empty = "目前什么也没有哟";
   static const String load_more_text = "正在加载更多";
   static const String load_more_not = "没有更多数据";
+  static const String message = "消息";
 
 }

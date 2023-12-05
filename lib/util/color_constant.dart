@@ -10,5 +10,6 @@ class ColorConstant {
   static const Color primaryDarkValue = Color(0xFF121917);
   static const Color mainTextColor = primaryDarkValue;
   static const Color subTextColor = Color(0xff959595);
+  static const Color backColor = Color(0xffF4F8FB);
 
 }

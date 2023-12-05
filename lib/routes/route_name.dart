@@ -17,4 +17,7 @@ class RouteName {
   /// 我的
   static const String minePage = '/minePage';
 
+  /// 消息
+  static const String messagePage = '/messagePage';
+
 }

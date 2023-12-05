@@ -1,6 +1,7 @@
 import 'package:digital_train/pages/HomeNavigationPage.dart';
 import 'package:digital_train/pages/LoginPage.dart';
 import 'package:digital_train/pages/home_page.dart';
+import 'package:digital_train/pages/message_page.dart';
 import 'package:digital_train/pages/mine_page.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -19,4 +20,5 @@ final Map<String, WidgetBuilder> routesData = {
   RouteName.loginPage: (BuildContext context, {params}) => const LoginPage(),
   RouteName.homePage: (BuildContext context, {params}) => const HomePage(),
   RouteName.minePage: (BuildContext context, {params}) => const MinePage(),
+  RouteName.messagePage: (BuildContext context, {params}) => const MessagePage(),
 };

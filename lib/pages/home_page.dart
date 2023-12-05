@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/machine_entity.dart';
 import '../net/url_cons.dart';
+import '../routes/route_name.dart';
 import '../util/image_constant.dart';
 import '../widget/vip_banner.dart';
 
@@ -54,7 +55,9 @@ class _HomePageState extends State<HomePage> {
             this.titleList.addAll(titleList);
           });
         },
-        failure: (String msg, int code) {});
+        failure: (String msg, int code) {
+          debugPrint("$msg, code: $code");
+        });
   }
 
   @override
@@ -196,7 +199,9 @@ class _HomePageState extends State<HomePage> {
             this.model.addAll(model);
           });
         },
-        failure: (String msg, int code) {});
+        failure: (String msg, int code) {
+          debugPrint("$msg, code: $code");
+        });
   }
 
   Widget _showMore() {
@@ -325,25 +330,6 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     ///学习地图
-                    BotToast.showText(text: '打开问卷');
-                  },
-                  child: Image(
-                    image: const AssetImage(ImageConstant.imageQuestion),
-                    width: 50.w,
-                    height: 50.w,
-                  ),
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                const Text('问卷'),
-              ],
-            ),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ///学习地图
                     BotToast.showText(text: '打开排行榜');
                   },
                   child: Image(
@@ -363,25 +349,6 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     ///学习地图
-                    BotToast.showText(text: '打开证书');
-                  },
-                  child: Image(
-                    image: const AssetImage(ImageConstant.imageCertificate),
-                    width: 50.w,
-                    height: 50.w,
-                  ),
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                const Text('证书'),
-              ],
-            ),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ///学习地图
                     BotToast.showText(text: '打开知识库');
                   },
                   child: Image(
@@ -394,6 +361,52 @@ class _HomePageState extends State<HomePage> {
                   height: 10.w,
                 ),
                 const Text('知识库'),
+              ],
+            ),
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ///学习地图
+                    // BotToast.showText(text: '打开证书');
+                  },
+                  child: SizedBox(
+                    width: 50.w,
+                    height: 50.w,
+                  ),
+                  // child: Image(
+                  //   image: const AssetImage(ImageConstant.imageCertificate),
+                  //   width: 50.w,
+                  //   height: 50.w,
+                  // ),
+                ),
+                SizedBox(
+                  height: 10.w,
+                ),
+                // const Text('证书'),
+              ],
+            ),
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ///学习地图
+                    // BotToast.showText(text: '打开问卷');
+                  },
+                  child: SizedBox(
+                    width: 50.w,
+                    height: 50.w,
+                  ),
+                  // child: Image(
+                  //   image: const AssetImage(ImageConstant.imageQuestion),
+                  //   width: 50.w,
+                  //   height: 50.w,
+                  // ),
+                ),
+                SizedBox(
+                  height: 10.w,
+                ),
+                // const Text('问卷'),
               ],
             ),
           ],
@@ -429,7 +442,7 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.all(3.w),
           onPressed: () {
             /// 打开消息列表
-            BotToast.showText(text: '打开消息列表');
+            Navigator.of(context).pushNamed(RouteName.messagePage);
           },
           icon: const ImageIcon(AssetImage(ImageConstant.imageMessage)),
         )

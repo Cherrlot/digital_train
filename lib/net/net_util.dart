@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 
+import 'interceptor/error_interceptor.dart';
 import 'my_http_decoder.dart';
 import 'url_cons.dart';
 
@@ -20,10 +21,7 @@ class NetDioUtil {
         .setReceiveTimeout(const Duration(milliseconds: 15000))
         .addInterceptor(InterceptorsWrapper(
           onError: (e, handler) {
-            var errorCode = e.response?.statusCode ?? -1;
-            var errorData = jsonDecode(e.response?.data);
-            var errorMsg = errorData['message'];
-            BotToast.showText(text:"$errorMsg errorCode: $errorCode");
+            ErrorInterceptor.handleError(e);
             handler.next(e);
           },
         ))
@@ -43,10 +41,7 @@ class NetDioUtil {
         .setReceiveTimeout(const Duration(milliseconds: 15000))
         .addInterceptor(InterceptorsWrapper(
           onError: (e, handler) {
-            var errorCode = e.response?.statusCode ?? -1;
-            var errorData = jsonDecode(e.response?.data);
-            var errorMsg = errorData['message'];
-            BotToast.showText(text:"$errorMsg errorCode: $errorCode");
+            ErrorInterceptor.handleError(e);
             handler.next(e);
           },
         ))

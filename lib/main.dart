@@ -1,3 +1,4 @@
+import 'package:digital_train/routes/navigate_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'routes/on_generate_route.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
             ),
             initialRoute: initialRoute,
             onGenerateRoute: onGenerateRoute,
+            navigatorKey: NavigatorProvider.navigatorKey,
           );
         });
   }
