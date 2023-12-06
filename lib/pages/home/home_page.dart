@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../model/machine_entity.dart';
-import '../net/url_cons.dart';
-import '../routes/route_name.dart';
-import '../util/image_constant.dart';
-import '../widget/vip_banner.dart';
+import '../../model/machine_entity.dart';
+import '../../net/url_cons.dart';
+import '../../routes/route_name.dart';
+import '../../util/image_constant.dart';
+import '../../widget/vip_banner.dart';
 
 /// 首页
 class HomePage extends StatefulWidget {
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.all(14.w),
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: ColorConstant.white,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(15.w), topRight: Radius.circular(15.w))),
       child: Column(
         children: [
@@ -263,8 +263,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ///学习地图
-                    BotToast.showText(text: '打开PK赛');
+                    ///打开PK赛
+                    Navigator.of(context).pushNamed(RouteName.pkPage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imagePk),
@@ -328,8 +328,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ///学习地图
-                    BotToast.showText(text: '打开排行榜');
+                    ///打开排行榜
+                    Navigator.of(context).pushNamed(RouteName.rankPage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imageRank),
@@ -347,8 +347,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ///学习地图
-                    BotToast.showText(text: '打开知识库');
+                    ///打开知识库
+                    Navigator.of(context).pushNamed(RouteName.knowledgePage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imageKnowledge),
@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
         imageList: imageList,
         bannerClick: (position) {
           //条目点击
-          BotToast.showText(text: '打开公告：${position.toString()}');
+          Navigator.of(context).pushNamed(RouteName.bannerPage, arguments: {"param": model[position]});
         });
   }
 

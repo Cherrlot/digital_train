@@ -3,6 +3,7 @@ import 'dart:ui';
 class Constants {
   static const String token = 'token';
   static const String userName = 'userName';
+  static const String account = 'account';
   static const String headUrl = 'headUrl';
   static const String userDepart = 'userDepart';
   static const String userPhone = 'userPhone';

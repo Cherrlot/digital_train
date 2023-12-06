@@ -20,6 +20,10 @@ class ImageConstant {
   static const String imageSetting = "asset/images/ic_setting.png";
   static const String imageBackMine = "asset/images/ic_back_mine.png";
   static const String imageMineBack = "asset/images/ic_mine_back.png";
+  static const String imageRankBack = "asset/images/ic_rank_back.png";
+  static const String imageRank1 = "asset/images/ic_rank_first.png";
+  static const String imageRank2 = "asset/images/ic_rank_second.png";
+  static const String imageRank3 = "asset/images/ic_rank_third.png";
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;
@@ -29,4 +33,5 @@ class ImageConstant {
   static const IconData ISSUE_EDIT_QUOTE = Icons.format_quote;
   static const IconData ISSUE_EDIT_CODE = Icons.format_shapes;
   static const IconData ISSUE_EDIT_LINK = Icons.insert_link;
+  static const IconData ICON_SEARCH = Icons.search;
 }

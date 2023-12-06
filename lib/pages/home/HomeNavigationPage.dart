@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
-import 'mine_page.dart';
+import '../mine_page.dart';
 
 /// 首页导航
 class HomeNavigationPage extends StatefulWidget {

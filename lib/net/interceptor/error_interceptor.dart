@@ -27,6 +27,7 @@ class ErrorInterceptor {
         if (navigatorState != null) {
           navigatorState.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginPage()), (route) => route == false);
         }
+        break;
       }
     }
   }

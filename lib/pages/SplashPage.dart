@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../net/net_util.dart';
 import '../util/sp_util.dart';
-import 'HomeNavigationPage.dart';
+import 'home/HomeNavigationPage.dart';
 import 'LoginPage.dart';
 
 /// 闪屏页。

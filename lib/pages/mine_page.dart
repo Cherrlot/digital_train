@@ -29,7 +29,6 @@ class _MinePageState extends State<MinePage> {
   }
 
   _setUserInfo() async {
-    await SpUtil.getInstance();
     setState(() {
       userName = SpUtil.getString(Constants.userName) ?? "";
       userPhone = SpUtil.getString(Constants.userPhone) ?? "";
@@ -79,7 +78,7 @@ class _MinePageState extends State<MinePage> {
       width: double.infinity,
       margin: EdgeInsets.fromLTRB(14.w, 35.w, 14.w, 4.w),
       padding: EdgeInsets.all(15.w),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+      decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
       child: Column(
         children: [
           _feed(),
@@ -203,7 +202,7 @@ class _MinePageState extends State<MinePage> {
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(10.w, 4.w, 10.w, 4.w),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+                decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                 child: Text(
                   // userPhone,
                   StringConstant.message,

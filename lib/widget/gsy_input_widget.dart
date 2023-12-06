@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 class GSYInputWidget extends StatefulWidget {
   final bool obscureText;
 
+  final TextInputAction? textInputAction;
+
   final String? hintText;
 
   final IconData? iconData;
 
   final ValueChanged<String>? onChanged;
+
+  final ValueChanged<String>? onSubmitted;
 
   final TextStyle? textStyle;
 
@@ -21,6 +25,8 @@ class GSYInputWidget extends StatefulWidget {
         this.onChanged,
         this.textStyle,
         this.controller,
+        this.textInputAction,
+        this.onSubmitted,
         this.obscureText = false});
 
   @override
@@ -35,7 +41,10 @@ class _GSYInputWidgetState extends State<GSYInputWidget> {
         controller: widget.controller,
         onChanged: widget.onChanged,
         obscureText: widget.obscureText,
+        textInputAction: widget.textInputAction,
+        onSubmitted: widget.onSubmitted,
         decoration: new InputDecoration(
+          border: InputBorder.none,
           hintText: widget.hintText,
           icon: widget.iconData == null ? null : new Icon(widget.iconData),
         ),

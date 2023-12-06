@@ -20,4 +20,25 @@ class RouteName {
   /// 消息
   static const String messagePage = '/messagePage';
 
+  /// 消息详情
+  static const String messageDetailPage = '/messagePageDetail';
+
+  /// 知识库
+  static const String knowledgePage = '/knowledge';
+
+  /// 知识库详情
+  static const String knowledgeDetailPage = '/knowledgeDetail';
+
+  /// pk
+  static const String pkPage = '/pk';
+
+  /// pk详情
+  static const String pkDetailPage = '/pkDetail';
+
+  /// pk详情
+  static const String rankPage = '/rank';
+
+  /// 公告详情
+  static const String bannerPage = '/banner';
+
 }

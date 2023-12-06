@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../model/machine_entity.dart';
-import '../net/url_cons.dart';
-import '../util/color_constant.dart';
-import '../util/image_constant.dart';
-import '../util/string_constant.dart';
+import '../../model/machine_entity.dart';
+import '../../net/url_cons.dart';
+import '../../routes/route_name.dart';
+import '../../util/color_constant.dart';
+import '../../util/image_constant.dart';
+import '../../util/string_constant.dart';
 
 /// 消息列表
 class MessagePage extends StatefulWidget {
@@ -23,17 +24,27 @@ class _MessagePageState extends State<MessagePage> {
   @override
   void initState() {
     super.initState();
-    _getMessage();
+    _getMessage(true);
   }
 
-  _getMessage() async {
+  _getMessage(bool showLoading) async {
+    CancelFunc? cancel;
+    if(showLoading) {
+      cancel = BotToast.showLoading();
+    }
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
       setState(() {
         this.model.addAll(model);
       });
+      if(showLoading) {
+        cancel!();
+      }
     }, failure: (String msg, int code) {
+      if(showLoading) {
+        cancel!();
+      }
       debugPrint("$msg, code: $code");
     });
   }
@@ -57,7 +68,7 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Future<void> _refresh() async {
-    _getMessage();
+    _getMessage(false);
   }
 
   Widget _itemView(index) {
@@ -65,12 +76,12 @@ class _MessagePageState extends State<MessagePage> {
     return GestureDetector(
         onTap: () {
           // 消息详情
-          BotToast.showText(text: '打开消息详情 ${data.category}');
+          Navigator.of(context).pushNamed(RouteName.messageDetailPage, arguments: {"param": data});
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(9.w, 10.w, 9.w, 10.w),
           margin: EdgeInsets.fromLTRB(14.w, 5.w, 14.w, 5.w),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+          decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
           child: Row(
             children: [
               Image(
@@ -117,7 +128,7 @@ class _MessagePageState extends State<MessagePage> {
       title: const Text(
         StringConstant.message,
         style: TextStyle(
-          color: Colors.black,
+          color: ColorConstant.black,
         ),
       ),
       centerTitle: true,

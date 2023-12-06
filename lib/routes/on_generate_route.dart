@@ -8,7 +8,7 @@ Route? onGenerateRoute(RouteSettings settings) {
   final Function? pageContentBuilder = routesData[name];
   if (pageContentBuilder != null) {
     if (settings.arguments != null) {
-      return MaterialPageRoute(builder: (context) => pageContentBuilder(context, arguments: settings.arguments));
+      return MaterialPageRoute(builder: (context) => pageContentBuilder(context, params: settings.arguments));
     } else {
       return MaterialPageRoute(
           builder: (context) => pageContentBuilder(context));

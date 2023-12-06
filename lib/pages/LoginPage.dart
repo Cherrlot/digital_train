@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:crypto/crypto.dart';
 
 import '../model/login_entity.dart';
 import '../net/net_util.dart';
@@ -26,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController accountController;
   late TextEditingController pwdController;
   bool checked = false;
+  var cancel;
 
   @override
   void initState() {
@@ -36,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
         _handleLogin();
       });
     };
-    accountController = TextEditingController();
+    accountController = TextEditingController(text: SpUtil.getString(Constants.account));
     pwdController = TextEditingController();
   }
 
@@ -64,21 +62,37 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     /// 登录
-    var cancel = BotToast.showLoading();
-    await SpUtil.getInstance();
+    cancel = BotToast.showLoading();
     var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
-    // var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
+        // var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
         decodeType: LoginEntity(),
         // data: {"identifier": account, "credential": md5.convert(utf8.encode(pwd)).toString(), "loginType": "password"}
         data: {"account": account, "pwd": pwd}
         // data: {"identifier": account, "credential": pwd}
-    );
+        );
     // appResponse.when(success: (List<LoginEntity> model) {
     appResponse.when(success: (LoginEntity model) {
       var token = model.token;
-    //   var token = model[0].token;
+      //   var token = model[0].token;
       NetDioUtil.initOptionWithToken(token);
       SpUtil.setString(Constants.token, token);
+      SpUtil.setString(Constants.account, account);
+      cancel();
+      Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
+    }, failure: (String msg, int code) {
+      cancel();
+    });
+  }
+
+  _getUserInfo() async{
+    var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['user_info']!,
+        decodeType: LoginEntity(),
+        data: {"ID": 0}
+    );
+    appResponse.when(success: (LoginEntity model) {
+      SpUtil.setString(Constants.headUrl, "");
+      SpUtil.setString(Constants.userName, "");
+      SpUtil.setString(Constants.userPhone, "");
       cancel();
       Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
     }, failure: (String msg, int code) {
@@ -139,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-  Widget buildTopWidget() {
+Widget buildTopWidget() {
   return Text(
     '您好，欢迎登录',
     style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w800),
@@ -172,7 +186,7 @@ class PrivacyWidget extends StatefulWidget {
   final ValueChanged<bool?> onChanged;
 
   @override
-  _PrivacyWidgetState createState() => _PrivacyWidgetState();
+  State<StatefulWidget> createState() => _PrivacyWidgetState();
 }
 
 class _PrivacyWidgetState extends State<PrivacyWidget> {

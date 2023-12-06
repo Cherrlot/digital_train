@@ -11,4 +11,7 @@ const serviceUrl = {
 
   ///获取设备列表
   'machines': 'api/bas-machines',
+
+  /// 获取用户信息
+  'user_info': 'api/member/user/get',
 };
