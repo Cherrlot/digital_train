@@ -9,6 +9,7 @@ import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
+import '../widget/network_image.dart';
 
 /// 排行榜
 class RankPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _RankPageState extends State<RankPage> {
   }
 
   _getStudyData() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
@@ -253,13 +254,12 @@ class _RankPageState extends State<RankPage> {
         child: Row(
           children: [
             ClipOval(
-                child: CachedNetworkImage(
+                child: NetworkImageWidget(
               height: 24.w,
               width: 24.w,
               fit: BoxFit.cover,
               imageUrl: '',
-              placeholder: (context, url) => _defaultImage(),
-              errorWidget: (context, url, error) => _defaultImage(),
+              defaultImage: ImageConstant.imageHeadDefault,
             )),
             SizedBox(
               width: 4.w,
@@ -271,14 +271,6 @@ class _RankPageState extends State<RankPage> {
             ),
           ],
         ));
-  }
-
-  Widget _defaultImage() {
-    return Image(
-      image: const AssetImage(ImageConstant.imageHeadDefault),
-      width: 24.w,
-      height: 24.w,
-    );
   }
 
   Widget _itemLeft(index) {

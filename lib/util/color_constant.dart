@@ -15,6 +15,7 @@ class ColorConstant {
   static const Color subTextColor = Color(0xff959595);
   static const Color backColor = Color(0xffF4F7FD);
   static const Color color3C94FD = Color(0xff3C94FD);
+  static const Color color663C94FD = Color(0x663C94FD);
   static const Color color03C94FD = Color(0x003C94FD);
   static const Color dividerColor = Color(0xffF2F3F6);
 

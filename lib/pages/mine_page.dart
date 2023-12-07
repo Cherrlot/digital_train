@@ -8,6 +8,7 @@ import '../util/color_constant.dart';
 import '../util/constant.dart';
 import '../util/image_constant.dart';
 import '../util/sp_util.dart';
+import '../widget/network_image.dart';
 
 /// 我的
 class MinePage extends StatefulWidget {
@@ -121,11 +122,11 @@ class _MinePageState extends State<MinePage> {
             ),
             Expanded(
                 child: Image(
-                  alignment: Alignment.centerRight,
-                  image: const AssetImage(ImageConstant.imageBackMine),
-                  width: 12.w,
-                  height: 12.w,
-                ))
+              alignment: Alignment.centerRight,
+              image: const AssetImage(ImageConstant.imageBackMine),
+              width: 12.w,
+              height: 12.w,
+            ))
           ],
         ));
   }
@@ -153,21 +154,13 @@ class _MinePageState extends State<MinePage> {
             ),
             Expanded(
                 child: Image(
-                  alignment: Alignment.centerRight,
-                  image: const AssetImage(ImageConstant.imageBackMine),
-                  width: 12.w,
-                  height: 12.w,
-                ))
+              alignment: Alignment.centerRight,
+              image: const AssetImage(ImageConstant.imageBackMine),
+              width: 12.w,
+              height: 12.w,
+            ))
           ],
         ));
-  }
-
-  Widget _defaultImage() {
-    return Image(
-      image: const AssetImage(ImageConstant.imageHeadDefault),
-      width: 60.w,
-      height: 60.w,
-    );
   }
 
   Widget _userInfo() {
@@ -177,13 +170,12 @@ class _MinePageState extends State<MinePage> {
       child: Row(
         children: [
           ClipOval(
-              child: CachedNetworkImage(
+              child: NetworkImageWidget(
             height: 60.w,
             width: 60.w,
             fit: BoxFit.cover,
             imageUrl: headUrl,
-            placeholder: (context, url) => _defaultImage(),
-            errorWidget: (context, url, error) => _defaultImage(),
+            defaultImage: ImageConstant.imageHeadDefault,
           )),
           SizedBox(
             width: 10.w,
@@ -202,7 +194,8 @@ class _MinePageState extends State<MinePage> {
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(10.w, 4.w, 10.w, 4.w),
-                decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+                decoration:
+                    BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                 child: Text(
                   // userPhone,
                   StringConstant.message,

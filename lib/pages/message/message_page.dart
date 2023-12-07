@@ -30,7 +30,7 @@ class _MessagePageState extends State<MessagePage> {
   _getMessage(bool showLoading) async {
     CancelFunc? cancel;
     if(showLoading) {
-      cancel = BotToast.showLoading();
+      cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});

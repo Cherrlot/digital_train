@@ -29,7 +29,7 @@ class _PkPageState extends State<PkPage> {
   _getPk(bool showLoading) async {
     CancelFunc? cancel;
     if(showLoading) {
-      cancel = BotToast.showLoading();
+      cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});

@@ -23,5 +23,17 @@ class StringConstant {
   static const String nickName = "用户昵称";
   static const String studyNow = "累计学习";
   static const String levelNow = "累计通关";
+  static const String lessonType = "课程分类";
+  static const String lessonSelect = "选课中心";
+  static const String test = "考试题目";
+  static const String testJudge = "判断题";
+  static const String testChoose = "选择题";
+  static const String testRight = "正确";
+  static const String testWrong = "错误";
+  static const String testAll = "30选择，20判断";
+  static const String sp = "/";
+  static const String confirm = "确定";
+  static const String cancel = "取消";
+
 
 }

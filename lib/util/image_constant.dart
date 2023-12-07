@@ -24,6 +24,7 @@ class ImageConstant {
   static const String imageRank1 = "asset/images/ic_rank_first.png";
   static const String imageRank2 = "asset/images/ic_rank_second.png";
   static const String imageRank3 = "asset/images/ic_rank_third.png";
+  static const String imageTestGrid = "asset/images/ic_test_list.png";
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;

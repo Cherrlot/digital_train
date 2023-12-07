@@ -40,7 +40,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
     var search = searchController.value.text;
     CancelFunc? cancel;
     if(showLoading) {
-      cancel = BotToast.showLoading();
+      cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});

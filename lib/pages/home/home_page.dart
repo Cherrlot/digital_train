@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:digital_train/util/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
@@ -9,6 +8,8 @@ import '../../model/machine_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/image_constant.dart';
+import '../../util/string_constant.dart';
+import '../../widget/network_image.dart';
 import '../../widget/vip_banner.dart';
 
 /// 首页
@@ -157,10 +158,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _defaultImage() {
-    return const Image(image: AssetImage(ImageConstant.imageLessonDefault), fit: BoxFit.cover);
-  }
-
   Widget _lessonItem(MachineEntity data) {
     return Column(
       children: [
@@ -168,11 +165,10 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               BotToast.showText(text: '查看课程${data.category}');
             },
-            child: CachedNetworkImage(
+            child: NetworkImageWidget(
               fit: BoxFit.cover,
               imageUrl: data.descr,
-              placeholder: (context, url) => _defaultImage(),
-              errorWidget: (context, url, error) => _defaultImage(),
+              defaultImage: ImageConstant.imageLessonDefault,
             )),
         Text(
           data.category,
@@ -207,14 +203,14 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: [
         Text(
-          '学习地图',
+          StringConstant.lessonSelect,
           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: ColorConstant.color212121),
         ),
         Expanded(
             child: GestureDetector(
                 onTap: () {
                   // 查看更多
-                  BotToast.showText(text: '查看更多');
+                  Navigator.of(context).pushNamed(RouteName.lessonPage);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -223,9 +219,11 @@ class _HomePageState extends State<HomePage> {
                       '查看更多',
                       style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
                     ),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: ColorConstant.color999999,
+                    Image(
+                      alignment: Alignment.centerRight,
+                      image: const AssetImage(ImageConstant.imageBackMine),
+                      width: 12.w,
+                      height: 12.w,
                     ),
                   ],
                 )))
@@ -282,8 +280,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ///学习地图
-                    BotToast.showText(text: '打开考试');
+                    ///打开考试
+                    Navigator.of(context).pushNamed(RouteName.testPage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imageTest),
@@ -301,8 +299,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ///学习地图
-                    BotToast.showText(text: '打开课程分类');
+                    ///打开课程分类
+                    Navigator.of(context).pushNamed(RouteName.lessonPage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imageType),

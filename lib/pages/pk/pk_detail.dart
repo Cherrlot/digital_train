@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
+import '../../widget/network_image.dart';
 
 /// pk榜单详情
 class PkDetailPage extends StatefulWidget {
@@ -32,7 +32,7 @@ class _PkDetailPageState extends State<PkDetailPage> {
   }
 
   _getData() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
@@ -143,13 +143,12 @@ class _PkDetailPageState extends State<PkDetailPage> {
         child: Row(
           children: [
             ClipOval(
-                child: CachedNetworkImage(
+                child: NetworkImageWidget(
               height: 24.w,
               width: 24.w,
               fit: BoxFit.cover,
               imageUrl: '',
-              placeholder: (context, url) => _defaultImage(),
-              errorWidget: (context, url, error) => _defaultImage(),
+              defaultImage: ImageConstant.imageHeadDefault,
             )),
             SizedBox(
               width: 4.w,
@@ -161,14 +160,6 @@ class _PkDetailPageState extends State<PkDetailPage> {
             ),
           ],
         ));
-  }
-
-  Widget _defaultImage() {
-    return Image(
-      image: const AssetImage(ImageConstant.imageHeadDefault),
-      width: 24.w,
-      height: 24.w,
-    );
   }
 
   Widget _itemLeft(index) {

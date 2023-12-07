@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     /// 登录
-    cancel = BotToast.showLoading();
+    cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
         // var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
         decodeType: LoginEntity(),

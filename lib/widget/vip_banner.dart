@@ -4,6 +4,7 @@ import 'package:digital_train/widget/vip_text.dart';
 import 'package:flutter/material.dart';
 
 import '../util/image_constant.dart';
+import 'network_image.dart';
 
 
 ///AUTHOR:AbnerMing
@@ -299,11 +300,10 @@ class _CarouselState extends State<VipBanner> with WidgetsBindingObserver {
         fit: widget.imageBoxFit,
       );
     } else {
-      return CachedNetworkImage(
+      return NetworkImageWidget(
           fit: widget.imageBoxFit,
-          placeholder: (context, url) => _imagePlaceholder(),
-          imageUrl: imageUrl,
-          errorWidget: (context, url, error) =>  _imageError());
+          defaultImage: ImageConstant.imageDefault,
+          imageUrl: imageUrl,);
     }
   }
 

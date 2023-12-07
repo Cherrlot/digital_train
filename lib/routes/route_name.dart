@@ -41,4 +41,10 @@ class RouteName {
   /// 公告详情
   static const String bannerPage = '/banner';
 
+  /// 课程列表
+  static const String lessonPage = '/lesson';
+
+  /// 考试
+  static const String testPage = '/test';
+
 }
