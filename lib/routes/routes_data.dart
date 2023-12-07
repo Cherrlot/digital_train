@@ -11,6 +11,7 @@ import '../pages/home/banner_detail.dart';
 import '../pages/knowledge/knowledge_detail.dart';
 import '../pages/knowledge/knowledge_page.dart';
 import '../pages/lesson/lesson_page.dart';
+import '../pages/map/study_map.dart';
 import '../pages/message/message_detail.dart';
 import '../pages/pk/pk_detail.dart';
 import '../pages/pk/pk_page.dart';
@@ -39,4 +40,5 @@ final Map<String, WidgetBuilder> routesData = {
   RouteName.rankPage: (BuildContext context, {params}) =>  const RankPage(),
   RouteName.lessonPage: (BuildContext context, {params}) =>  const LessonPage(),
   RouteName.testPage: (BuildContext context, {params}) =>  const TestPage(),
+  RouteName.studyMapPage: (BuildContext context, {params}) =>  const StudyMapPage(),
 };

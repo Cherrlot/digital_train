@@ -97,7 +97,7 @@ class _PkPageState extends State<PkPage> {
         },
       ),
       title: const Text(
-        StringConstant.pk,
+        StringConstant.pkDetail,
         style: TextStyle(
           color: Colors.black,
         ),

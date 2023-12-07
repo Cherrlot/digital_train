@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     ///学习地图
-                    BotToast.showText(text: '打开学习地图');
+                    Navigator.of(context).pushNamed(RouteName.studyMapPage);
                   },
                   child: Image(
                     image: const AssetImage(ImageConstant.imageMap),

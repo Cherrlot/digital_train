@@ -25,6 +25,13 @@ class ImageConstant {
   static const String imageRank2 = "asset/images/ic_rank_second.png";
   static const String imageRank3 = "asset/images/ic_rank_third.png";
   static const String imageTestGrid = "asset/images/ic_test_list.png";
+  static const String imageStudyMapBack = "asset/images/ic_map_back.png";
+  static const String imageStudyMapLock = "asset/images/ic_map_lock.png";
+  static const String imageStudyMapMsg = "asset/images/ic_map_msg.png";
+  static const String imageStudyMapRank = "asset/images/ic_map_rank.png";
+  static const String imageStudyMapWater = "asset/images/ic_map_water.png";
+  static const String imageStudyMapLine1 = "asset/images/ic_map_line1.png";
+  static const String imageStudyMapLine2 = "asset/images/ic_map_line2.png";
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;

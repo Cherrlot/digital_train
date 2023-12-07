@@ -47,4 +47,7 @@ class RouteName {
   /// 考试
   static const String testPage = '/test';
 
+  /// 学习地图
+  static const String studyMapPage = '/studyMap';
+
 }

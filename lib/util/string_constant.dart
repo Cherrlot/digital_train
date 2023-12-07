@@ -34,6 +34,7 @@ class StringConstant {
   static const String sp = "/";
   static const String confirm = "确定";
   static const String cancel = "取消";
+  static const String studyMap = "学习地图";
 
 
 }
