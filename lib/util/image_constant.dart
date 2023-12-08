@@ -32,6 +32,8 @@ class ImageConstant {
   static const String imageStudyMapWater = "asset/images/ic_map_water.png";
   static const String imageStudyMapLine1 = "asset/images/ic_map_line1.png";
   static const String imageStudyMapLine2 = "asset/images/ic_map_line2.png";
+  static const String imageTestResult = "asset/images/test_result_back.png";
+  static const String imageResetPwd = "asset/images/ic_reset_pwd.png";
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;

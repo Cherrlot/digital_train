@@ -1,14 +1,14 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:digital_train/util/string_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../util/color_constant.dart';
-import '../util/constant.dart';
-import '../util/image_constant.dart';
-import '../util/sp_util.dart';
-import '../widget/network_image.dart';
+import '../../routes/route_name.dart';
+import '../../util/color_constant.dart';
+import '../../util/constant.dart';
+import '../../util/image_constant.dart';
+import '../../util/sp_util.dart';
+import '../../widget/network_image.dart';
 
 /// 我的
 class MinePage extends StatefulWidget {
@@ -66,7 +66,12 @@ class _MinePageState extends State<MinePage> {
                 SizedBox(
                   height: 30.w,
                 ),
-                _userInfo(),
+                GestureDetector(
+                    onTap: () {
+                      // 编辑用户资料
+                      Navigator.of(context).pushNamed(RouteName.userInfoPage);
+                    },
+                    child: _userInfo()),
                 _setting()
               ],
             ),
@@ -103,7 +108,7 @@ class _MinePageState extends State<MinePage> {
     return GestureDetector(
         onTap: () {
           // 设置
-          BotToast.showText(text: '设置');
+          Navigator.of(context).pushNamed(RouteName.settingPage);
         },
         child: Row(
           children: [
@@ -135,7 +140,7 @@ class _MinePageState extends State<MinePage> {
     return GestureDetector(
         onTap: () {
           // 意见反馈
-          BotToast.showText(text: '意见反馈');
+          Navigator.of(context).pushNamed(RouteName.advicePage);
         },
         child: Row(
           children: [
@@ -193,16 +198,23 @@ class _MinePageState extends State<MinePage> {
                 height: 8.w,
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(10.w, 4.w, 10.w, 4.w),
-                decoration:
-                    BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
-                child: Text(
-                  // userPhone,
-                  StringConstant.message,
-                  maxLines: 1,
-                  style: TextStyle(fontSize: 12.sp, color: ColorConstant.color3C94FD),
-                ),
-              )
+                  padding: EdgeInsets.fromLTRB(10.w, 4.w, 10.w, 4.w),
+                  decoration:
+                      BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(20.w))),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.phone_android,
+                        color: ColorConstant.color3C94FD,
+                        size: 10.w,
+                      ),
+                      Text(
+                        // userPhone,
+                        StringConstant.message,
+                        style: TextStyle(fontSize: 12.sp, color: ColorConstant.color3C94FD),
+                      )
+                    ],
+                  ))
             ],
           ),
         ],

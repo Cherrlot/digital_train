@@ -2,7 +2,7 @@ import 'package:digital_train/pages/home/HomeNavigationPage.dart';
 import 'package:digital_train/pages/LoginPage.dart';
 import 'package:digital_train/pages/home/home_page.dart';
 import 'package:digital_train/pages/message/message_page.dart';
-import 'package:digital_train/pages/mine_page.dart';
+import 'package:digital_train/pages/mine/mine_page.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../basic_player_page.dart';
@@ -15,10 +15,15 @@ import '../pages/lesson/lesson_detail.dart';
 import '../pages/lesson/lesson_page.dart';
 import '../pages/map/study_map.dart';
 import '../pages/message/message_detail.dart';
+import '../pages/mine/advice_page.dart';
+import '../pages/mine/reset_pwd_page.dart';
+import '../pages/mine/setting_page.dart';
+import '../pages/mine/user_info_page.dart';
 import '../pages/pk/pk_detail.dart';
 import '../pages/pk/pk_page.dart';
 import '../pages/rank_page.dart';
 import '../pages/test/test_page.dart';
+import '../pages/test/test_result.dart';
 import 'route_name.dart';
 
 const String initialRoute = RouteName.splashPage; // 初始默认显示的路由
@@ -38,11 +43,16 @@ final Map<String, WidgetBuilder> routesData = {
   RouteName.knowledgeDetailPage: (BuildContext context, {params}) =>  KnowledgeDetailPage(params: params),
   RouteName.pkDetailPage: (BuildContext context, {params}) =>  PkDetailPage(params: params),
   RouteName.bannerPage: (BuildContext context, {params}) =>  BannerDetailPage(params: params),
-  RouteName.lessonDetailPage: (BuildContext context, {params}) =>  CachePage(),
-  // RouteName.lessonDetailPage: (BuildContext context, {params}) =>  LessonDetailPage(params: params),
+  // RouteName.lessonDetailPage: (BuildContext context, {params}) =>  CachePage(),
+  RouteName.lessonDetailPage: (BuildContext context, {params}) =>  LessonDetailPage(params: params),
+  RouteName.testResult: (BuildContext context, {params}) =>  TestResultPage(params: params),
   RouteName.pkPage: (BuildContext context, {params}) =>  const PkPage(),
   RouteName.rankPage: (BuildContext context, {params}) =>  const RankPage(),
   RouteName.lessonPage: (BuildContext context, {params}) =>  const LessonPage(),
   RouteName.testPage: (BuildContext context, {params}) =>  const TestPage(),
   RouteName.studyMapPage: (BuildContext context, {params}) =>  const StudyMapPage(),
+  RouteName.advicePage: (BuildContext context, {params}) =>  const AdvicePage(),
+  RouteName.settingPage: (BuildContext context, {params}) =>  const SettingPage(),
+  RouteName.resetPwdPage: (BuildContext context, {params}) =>  const ResetPwdPage(),
+  RouteName.userInfoPage: (BuildContext context, {params}) =>  const UserInfoPage(),
 };

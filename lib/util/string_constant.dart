@@ -30,13 +30,42 @@ class StringConstant {
   static const String testChoose = "选择题";
   static const String testRight = "正确";
   static const String testWrong = "错误";
-  static const String testAll = "30选择，20判断";
+  static const String testAll = "交卷";
   static const String sp = "/";
   static const String confirm = "确定";
   static const String cancel = "取消";
   static const String studyMap = "学习地图";
   static const String lessonDetail = "课程详情";
   static const String playbackSpeed = "播放速度";
+  static const String testConfirmContent = "确定现在交卷吗？";
+  static const String testConfirm = "现在交卷";
+  static const String testContinue = "继续答题";
+  static const String testResult = "考试成绩";
+  static const String testPoint = "考试得分";
+  static const String hint = "提示？";
+  static const String userInfo = "用户资料";
+  static const String advice = "意见反馈";
+  static const String adviceTitle = "问题和意见*";
+  static const String adviceHint = "请写下您的建议，我们会尽快为您解决";
+  static const String contract = "联系方式";
+  static const String name = "姓   名：";
+  static const String phone = "电   话：";
+  static const String nameHint = "请输入姓名";
+  static const String phoneHint = "请填写您的联系方式";
+  static const String confirmNow = "立即提交";
+  static const String resetPwd = "修改密码";
+  static const String logout = "退出登录";
+  static const String logoutHint = "是否确认退出登录？";
+  static const String pwdResetHint = "是否确认修改密码？";
+  static const String userInfoHint = "是否确认修改用户资料？";
+  static const String loginTitle = "账号密码登录";
+  static const String pwdInput = "请输入旧密码";
+  static const String pwdNew = "请输入新密码";
+  static const String pwdNewConfirm = "请确认新密码";
+  static const String pwdConfirmError = "两次输入的密码不一致";
+  static const String nickname = "用户昵称";
+  static const String userPhone = "手机号";
+  static const String userHead = "点击修改头像";
 
 
 }

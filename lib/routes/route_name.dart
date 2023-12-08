@@ -50,7 +50,22 @@ class RouteName {
   /// 考试
   static const String testPage = '/test';
 
+  /// 考试成绩
+  static const String testResult = '/testResult';
+
   /// 学习地图
   static const String studyMapPage = '/studyMap';
+
+  /// 意见反馈
+  static const String advicePage = '/advice';
+
+  /// 设置
+  static const String settingPage = '/setting';
+
+  /// 修改密码
+  static const String resetPwdPage = '/resetPwd';
+
+  /// 用户资料
+  static const String userInfoPage = '/userInfo';
 
 }

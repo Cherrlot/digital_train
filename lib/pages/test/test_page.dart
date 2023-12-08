@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
 import '../../model/machine_entity.dart';
 import '../../net/url_cons.dart';
+import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
 import '../../util/string_constant.dart';
 import '../../widget/my_radio_option.dart';
@@ -93,10 +95,37 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
+  _showTestFinishDialog() {
+    Dialogs.materialDialog(
+      context: context,
+      title: StringConstant.hint,
+      msg: StringConstant.testConfirmContent,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () {
+              // 交卷
+              Navigator.of(context).pushReplacementNamed(RouteName.testResult, arguments: {"param": 'data.id'});
+            },
+            text: StringConstant.testConfirm,
+            color: ColorConstant.color3C94FD,
+            textStyle: const TextStyle(color: ColorConstant.color333333),
+          ),
+          IconsOutlineButton(
+            onPressed: () {
+              // 取消
+              Navigator.of(context).pop();
+            },
+            text: StringConstant.testContinue,
+            textStyle: const TextStyle(color: ColorConstant.white),
+          ),
+        ],
+    );
+  }
+
   Widget _topicGrid() {
     return Expanded(
         child: GridView.count(
-          padding: EdgeInsets.all(4.w),
+      padding: EdgeInsets.all(4.w),
       crossAxisCount: 6,
       shrinkWrap: true,
       crossAxisSpacing: 6.w,
@@ -156,9 +185,20 @@ class _TestPageState extends State<TestPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    StringConstant.testAll,
-                    style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.w500),
+                  ElevatedButton(
+                    onPressed: () {
+                      //交卷
+                      _showTestFinishDialog();
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ColorConstant.color3C94FD),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.w),
+                        ))),
+                    child: Text(
+                      StringConstant.testAll,
+                      style: TextStyle(fontSize: 12.sp, color: ColorConstant.white, fontWeight: FontWeight.w500),
+                    ),
                   ),
                   Row(
                     children: [
