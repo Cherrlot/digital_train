@@ -5,11 +5,13 @@ import 'package:digital_train/pages/message/message_page.dart';
 import 'package:digital_train/pages/mine_page.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../basic_player_page.dart';
 import '../pages/ErrorPage/ErrorPage.dart';
 import '../pages/SplashPage.dart';
 import '../pages/home/banner_detail.dart';
 import '../pages/knowledge/knowledge_detail.dart';
 import '../pages/knowledge/knowledge_page.dart';
+import '../pages/lesson/lesson_detail.dart';
 import '../pages/lesson/lesson_page.dart';
 import '../pages/map/study_map.dart';
 import '../pages/message/message_detail.dart';
@@ -36,6 +38,8 @@ final Map<String, WidgetBuilder> routesData = {
   RouteName.knowledgeDetailPage: (BuildContext context, {params}) =>  KnowledgeDetailPage(params: params),
   RouteName.pkDetailPage: (BuildContext context, {params}) =>  PkDetailPage(params: params),
   RouteName.bannerPage: (BuildContext context, {params}) =>  BannerDetailPage(params: params),
+  RouteName.lessonDetailPage: (BuildContext context, {params}) =>  CachePage(),
+  // RouteName.lessonDetailPage: (BuildContext context, {params}) =>  LessonDetailPage(params: params),
   RouteName.pkPage: (BuildContext context, {params}) =>  const PkPage(),
   RouteName.rankPage: (BuildContext context, {params}) =>  const RankPage(),
   RouteName.lessonPage: (BuildContext context, {params}) =>  const LessonPage(),

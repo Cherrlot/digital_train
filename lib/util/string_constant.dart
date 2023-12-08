@@ -35,6 +35,8 @@ class StringConstant {
   static const String confirm = "确定";
   static const String cancel = "取消";
   static const String studyMap = "学习地图";
+  static const String lessonDetail = "课程详情";
+  static const String playbackSpeed = "播放速度";
 
 
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:digital_train/util/string_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -150,14 +149,14 @@ class CommonUtils {
   }
 
   ///获取设备信息
-  static Future<String> getDeviceInfo() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      return "";
-    }
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    return iosInfo.model;
-  }
+  // static Future<String> getDeviceInfo() async {
+  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //   if (Platform.isAndroid) {
+  //     return "";
+  //   }
+  //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //   return iosInfo.model;
+  // }
 
   static const IMAGE_END = [".png", ".jpg", ".jpeg", ".gif", ".svg"];
 

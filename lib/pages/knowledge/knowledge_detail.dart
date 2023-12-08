@@ -1,14 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/machine_entity.dart';
-import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
-import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
-import '../../widget/gsy_input_widget.dart';
 
 /// 知识库详情
 class KnowledgeDetailPage extends StatefulWidget {

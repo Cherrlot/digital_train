@@ -44,6 +44,9 @@ class RouteName {
   /// 课程列表
   static const String lessonPage = '/lesson';
 
+  /// 课程详情
+  static const String lessonDetailPage = '/lessonDetail';
+
   /// 考试
   static const String testPage = '/test';
 

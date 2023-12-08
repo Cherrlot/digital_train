@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         GestureDetector(
             onTap: () {
-              BotToast.showText(text: '查看课程${data.category}');
+              Navigator.of(context).pushNamed(RouteName.lessonDetailPage, arguments: {"param": data.id});
             },
             child: NetworkImageWidget(
               fit: BoxFit.cover,

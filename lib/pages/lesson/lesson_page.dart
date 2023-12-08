@@ -166,7 +166,7 @@ class _LessonPageState extends State<LessonPage> {
     return GestureDetector(
         onTap: () {
           // 课程详情
-          Navigator.of(context).pushNamed(RouteName.pkDetailPage, arguments: {"param": data.id});
+          Navigator.of(context).pushNamed(RouteName.lessonDetailPage, arguments: {"param": data.id});
         },
         child: Container(
           height: 78.w,
