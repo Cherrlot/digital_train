@@ -105,7 +105,7 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
           },
           text: StringConstant.confirm,
           color: ColorConstant.color3C94FD,
-          textStyle: const TextStyle(color: ColorConstant.color333333),
+          textStyle: const TextStyle(color: ColorConstant.white),
         ),
         IconsOutlineButton(
           onPressed: () {
@@ -113,7 +113,7 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
             Navigator.of(context).pop();
           },
           text: StringConstant.cancel,
-          textStyle: const TextStyle(color: ColorConstant.white),
+          textStyle: const TextStyle(color: ColorConstant.color333333),
         ),
       ],
     );

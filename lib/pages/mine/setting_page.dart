@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
+import '../../net/net_util.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
@@ -72,6 +73,7 @@ class _SettingPageState extends State<SettingPage> {
         IconsOutlineButton(
           onPressed: () {
             // 退出登录
+            NetDioUtil.initOption();
             SpUtil.setString(Constants.token, '');
             Navigator.pushAndRemoveUntil(
               context,
@@ -81,7 +83,7 @@ class _SettingPageState extends State<SettingPage> {
           },
           text: StringConstant.confirm,
           color: ColorConstant.color3C94FD,
-          textStyle: const TextStyle(color: ColorConstant.color333333),
+          textStyle: const TextStyle(color: ColorConstant.white),
         ),
         IconsOutlineButton(
           onPressed: () {
@@ -89,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
             Navigator.of(context).pop();
           },
           text: StringConstant.cancel,
-          textStyle: const TextStyle(color: ColorConstant.white),
+          textStyle: const TextStyle(color: ColorConstant.color333333),
         ),
       ],
     );

@@ -11,12 +11,17 @@ class ErrorInterceptor {
   static handleError(DioException e) {
     var errorCode = e.response?.statusCode ?? -1;
     var errorData = e.response?.data;
-    var errorMsg = "";
+    var error = e.error;
+    String? errorMsg = "";
     try {
-      var errorJson = jsonDecode(errorData);
-      errorMsg = errorJson['message'];
+      if(e.type == DioExceptionType.unknown) {
+        errorMsg = error.toString();
+      } else {
+        var errorJson = jsonDecode(errorData);
+        errorMsg = errorJson['message'];
+      }
     } catch(e) {
-      errorMsg = errorData;
+      errorMsg = errorData?.toString();
     }
     BotToast.showText(text:"$errorMsg errorCode: $errorCode");
 

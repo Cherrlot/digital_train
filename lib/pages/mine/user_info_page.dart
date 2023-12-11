@@ -3,17 +3,19 @@ import 'package:digital_train/util/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/login_entity.dart';
+import '../../model/upload_image_entity.dart';
 import '../../net/url_cons.dart';
-import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
 import '../../util/constant.dart';
 import '../../util/image_constant.dart';
+import '../../util/image_util.dart';
 import '../../util/string_constant.dart';
-import '../../widget/gsy_input_widget.dart';
 import '../../widget/network_image.dart';
 
 /// 用户资料
@@ -27,6 +29,10 @@ class UserInfoPage extends StatefulWidget {
 class _UserInfoPageState extends State<UserInfoPage> {
   late TextEditingController nickNameController;
   late TextEditingController phoneController;
+
+  final ImagePicker _picker = ImagePicker();
+
+  String? _headImage;
 
   @override
   void initState() {
@@ -55,21 +61,130 @@ class _UserInfoPageState extends State<UserInfoPage> {
             GestureDetector(
                 onTap: () {
                   // 编辑头像
+                  _showSelectImageDialog();
                 },
-                child:_userHeader()),
-            SizedBox(height: 10.w,),
+                child: _userHeader()),
+            SizedBox(
+              height: 10.w,
+            ),
             Text(
               StringConstant.userHead,
               style: TextStyle(fontSize: 14.sp, color: ColorConstant.color999999),
             ),
-            SizedBox(height: 10.w,),
+            SizedBox(
+              height: 10.w,
+            ),
             buildNickNameInputWidget(nickNameController),
-            SizedBox(height: 10.w,),
+            SizedBox(
+              height: 10.w,
+            ),
             buildPhoneInputWidget(phoneController),
-            SizedBox(height: 50.w,),
+            SizedBox(
+              height: 50.w,
+            ),
             _button()
           ])),
     );
+  }
+
+  _showSelectImageDialog() {
+    Dialogs.bottomMaterialDialog(
+        context: context,
+        customView: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () async {
+                try {
+                  final XFile? pickedFile = await _picker.pickImage(
+                    source: ImageSource.camera,
+                    imageQuality: 80,
+                  );
+                  if (pickedFile != null) {
+                    // 获取图片路径
+                    // 关闭弹窗
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                    // 获取裁剪后地址
+                    var cropperFile = await ImageUtil.cropImage(image: pickedFile.path,
+                        cropStyle: CropStyle.circle,
+                        aspectRatioPresets: [
+                          CropAspectRatioPreset.original,
+                          CropAspectRatioPreset.square,
+                          CropAspectRatioPreset.ratio3x2,
+                          CropAspectRatioPreset.ratio4x3,
+                          CropAspectRatioPreset.ratio16x9
+                        ]);
+                    // 请求接口上传图片
+                    if (cropperFile != null) {
+                      _uploadImage(cropperFile.path);
+                    }
+                  }
+                } catch (e) {}
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 50.w,
+                decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 0.5, color: Colors.black26))),
+                child: const Text(StringConstant.camera),
+              ),
+            ),
+            InkWell(
+              onTap: () async {
+                try {
+                  final XFile? pickedFile = await _picker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (pickedFile != null) {
+                    // 获取图片路径
+                    // 关闭弹窗
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                    // 获取裁剪后地址
+                    var cropperFile = await ImageUtil.cropImage(image: pickedFile.path);
+                    // 请求接口上传图片
+                    if (cropperFile != null) {
+                      _uploadImage(cropperFile.path);
+                    }
+                  }
+                } catch (e) {}
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 50.w,
+                child: const Text(StringConstant.gallery),
+              ),
+            )
+          ],
+        ));
+  }
+
+  _uploadImage(path) async {
+    var cancel = BotToast.showLoading();
+    String name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    FormData formData = FormData.fromMap(
+      {
+        "file": await MultipartFile.fromFile(
+          path,
+          filename: name,
+        )
+      },
+    );
+
+    var appResponse = await post<UploadImageEntity, List<UploadImageEntity>?>(serviceUrl['upload_image']!,
+        options: Options(contentType: 'multipart/form-data'), decodeType: UploadImageEntity(), data: formData);
+
+    appResponse.when(success: (List<UploadImageEntity>? model) {
+      var imagePath = model?[0].url;
+      setState(() {
+        _headImage = '$baseUrl$basePort$imagePath';
+      });
+      cancel();
+    }, failure: (String msg, int code) {
+      cancel();
+      debugPrint("失败了：msg=$msg/code=$code");
+    });
   }
 
   _showDialog() {
@@ -86,7 +201,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           },
           text: StringConstant.confirm,
           color: ColorConstant.color3C94FD,
-          textStyle: const TextStyle(color: ColorConstant.color333333),
+          textStyle: const TextStyle(color: ColorConstant.white),
         ),
         IconsOutlineButton(
           onPressed: () {
@@ -94,7 +209,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             Navigator.of(context).pop();
           },
           text: StringConstant.cancel,
-          textStyle: const TextStyle(color: ColorConstant.white),
+          textStyle: const TextStyle(color: ColorConstant.color333333),
         ),
       ],
     );
@@ -122,12 +237,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget _userHeader() {
     return ClipOval(
         child: NetworkImageWidget(
-          height: 120.w,
-          width: 120.w,
-          fit: BoxFit.cover,
-          imageUrl: SpUtil.getString(Constants.headUrl) ?? '',
-          defaultImage: ImageConstant.imageHeadDefault,
-        ));
+      height: 120.w,
+      width: 120.w,
+      fit: BoxFit.cover,
+      imageUrl: _headImage ?? SpUtil.getString(Constants.headUrl) ?? '',
+      defaultImage: ImageConstant.imageHeadDefault,
+    ));
   }
 
   Widget buildNickNameInputWidget(TextEditingController controller) {

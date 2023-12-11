@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_nb_net/flutter_net.dart';
 
+import '../../model/user_info_entity.dart';
+import '../../net/url_cons.dart';
+import '../../util/constant.dart';
+import '../../util/sp_util.dart';
 import 'home_page.dart';
 import '../mine/mine_page.dart';
 
@@ -20,6 +25,27 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
         body: pages[_bottomNavigationIndex], //页面切换
         bottomNavigationBar: _bottomNavigationBar() //底部导航
         );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserInfo();
+  }
+
+  _getUserInfo() async {
+    var appResponse =
+    await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+    appResponse.when(success: (List<UserInfoEntity>? model) {
+      var userInfo = model?[0];
+      if(userInfo != null) {
+        SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
+        SpUtil.setString(Constants.userName, userInfo.name ?? '');
+        SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
+        SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
+      }
+    }, failure: (String msg, int code) {
+    });
   }
 
   //底部导航-样式

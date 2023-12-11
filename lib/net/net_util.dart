@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 
 import 'interceptor/error_interceptor.dart';
@@ -13,12 +10,12 @@ class NetDioUtil {
         // header
         .addHeaders({"Authorization": token})
         // baseUrl
-        .setBaseUrl(baseUrl)
+        .setBaseUrl('$baseUrl$basePort')
         //  全局解析器
         .setHttpDecoder(MyHttpDecoder.getInstance())
         //  超时时间
-        .setConnectTimeout(const Duration(milliseconds: 15000))
-        .setReceiveTimeout(const Duration(milliseconds: 15000))
+        .setConnectTimeout(const Duration(milliseconds: 20000))
+        .setReceiveTimeout(const Duration(milliseconds: 20000))
         .addInterceptor(InterceptorsWrapper(
           onError: (e, handler) {
             ErrorInterceptor.handleError(e);
@@ -33,12 +30,12 @@ class NetDioUtil {
   static void initOption() {
     NetOptions.instance
         // baseUrl
-        .setBaseUrl(baseUrl)
+        .setBaseUrl('$baseUrl$basePort')
         //  全局解析器
         .setHttpDecoder(MyHttpDecoder.getInstance())
         //  超时时间
-        .setConnectTimeout(const Duration(milliseconds: 15000))
-        .setReceiveTimeout(const Duration(milliseconds: 15000))
+        .setConnectTimeout(const Duration(milliseconds: 20000))
+        .setReceiveTimeout(const Duration(milliseconds: 20000))
         .addInterceptor(InterceptorsWrapper(
           onError: (e, handler) {
             ErrorInterceptor.handleError(e);

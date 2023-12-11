@@ -6,6 +6,9 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:digital_train/model/login_entity.dart';
 import 'package:digital_train/model/machine_entity.dart';
+import 'package:digital_train/model/test_result_entity.dart';
+import 'package:digital_train/model/upload_image_entity.dart';
+import 'package:digital_train/model/user_info_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -130,6 +133,15 @@ class JsonConvert {
     if (<MachineEntity>[] is M) {
       return data.map<MachineEntity>((Map<String, dynamic> e) => MachineEntity.fromJson(e)).toList() as M;
     }
+    if (<TestResultEntity>[] is M) {
+      return data.map<TestResultEntity>((Map<String, dynamic> e) => TestResultEntity.fromJson(e)).toList() as M;
+    }
+    if (<UploadImageEntity>[] is M) {
+      return data.map<UploadImageEntity>((Map<String, dynamic> e) => UploadImageEntity.fromJson(e)).toList() as M;
+    }
+    if (<UserInfoEntity>[] is M) {
+      return data.map<UserInfoEntity>((Map<String, dynamic> e) => UserInfoEntity.fromJson(e)).toList() as M;
+    }
 
     debugPrint("$M not found");
 
@@ -152,6 +164,9 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (LoginEntity).toString(): LoginEntity.fromJson,
     (MachineEntity).toString(): MachineEntity.fromJson,
+    (TestResultEntity).toString(): TestResultEntity.fromJson,
+    (UploadImageEntity).toString(): UploadImageEntity.fromJson,
+    (UserInfoEntity).toString(): UserInfoEntity.fromJson,
   };
 
   bool containsKey(String type) {

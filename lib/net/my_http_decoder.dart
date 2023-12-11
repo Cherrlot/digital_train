@@ -16,32 +16,11 @@ class MyHttpDecoder extends NetDecoder {
   @override
   K decode<T, K>({required Response<dynamic> response,  T? decodeType}) {
     var json = jsonDecode(response.data);
-    var errorCode = json['result'];
-
-    /// 请求成功
-    if (errorCode != null) {
-      var data = json['result'];
-      if (decodeType is BaseNetModel) {
-        if (data is List) {
-          var dataList = List<T>.from(
-              data.map((item) => decodeType.fromJson(item)).toList()) as K;
-          return dataList;
-        } else {
-          var model = decodeType.fromJson(data) as K;
-          return model;
-        }
-      } else {
-        return data as K;
-      }
-    } else {
-      var errorMsg = json['message'];
-      throw NetException(errorMsg, errorCode);
-    }
-    // var errorCode = json['code'];
+    // var errorCode = json['result'];
     //
     // /// 请求成功
-    // if (errorCode == 0) {
-    //   var data = json['data'];
+    // if (errorCode != null) {
+    //   var data = json['result'];
     //   if (decodeType is BaseNetModel) {
     //     if (data is List) {
     //       var dataList = List<T>.from(
@@ -58,5 +37,26 @@ class MyHttpDecoder extends NetDecoder {
     //   var errorMsg = json['message'];
     //   throw NetException(errorMsg, errorCode);
     // }
+    var errorCode = json['code'];
+
+    /// 请求成功
+    if (errorCode == 0) {
+      var data = json['data'];
+      if (decodeType is BaseNetModel) {
+        if (data is List) {
+          var dataList = List<T>.from(
+              data.map((item) => decodeType.fromJson(item)).toList()) as K;
+          return dataList;
+        } else {
+          var model = decodeType.fromJson(data) as K;
+          return model;
+        }
+      } else {
+        return data as K;
+      }
+    } else {
+      var errorMsg = json['message'];
+      throw NetException(errorMsg, errorCode);
+    }
   }
 }

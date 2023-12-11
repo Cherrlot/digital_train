@@ -146,7 +146,7 @@ class _CarouselState extends State<VipBanner> with WidgetsBindingObserver {
   * 开启定时
   * */
   void _startTimer() {
-    if (!_isRunning) {
+    if (!_isRunning && _controller.hasClients) {
       _isRunning = true;
       _timer = Timer.periodic(Duration(seconds: widget.delay!), (timer) {
         _controller.animateToPage(_pagePosition + 1,

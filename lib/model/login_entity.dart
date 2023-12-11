@@ -5,11 +5,12 @@ import 'dart:convert';
 import 'package:flutter_nb_net/flutter_net.dart';
 export 'package:digital_train/generated/json/login_entity.g.dart';
 
+/// Alt+j重新编译
 @JsonSerializable()
 class LoginEntity extends BaseNetModel {
 	late String token;
-	late String authId;
-	late String accessToken;
+	// late String authId;
+	// late String accessToken;
 
 	LoginEntity();
 

@@ -6,6 +6,7 @@ import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/login_entity.dart';
+import '../model/user_info_entity.dart';
 import '../net/net_util.dart';
 import '../net/url_cons.dart';
 import '../routes/route_name.dart';
@@ -66,22 +67,22 @@ class _LoginPageState extends State<LoginPage> {
 
     /// 登录
     cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
-        // var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
+    // var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
+        var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
         decodeType: LoginEntity(),
         // data: {"identifier": account, "credential": md5.convert(utf8.encode(pwd)).toString(), "loginType": "password"}
-        data: {"account": account, "pwd": pwd}
-        // data: {"identifier": account, "credential": pwd}
+        // data: {"account": account, "pwd": pwd}
+        data: {"identifier": account, "credential": pwd}
         );
-    // appResponse.when(success: (List<LoginEntity> model) {
-    appResponse.when(success: (LoginEntity model) {
-      var token = model.token;
-      //   var token = model[0].token;
+    appResponse.when(success: (List<LoginEntity> model) {
+    // appResponse.when(success: (LoginEntity model) {
+      // var token = model.token;
+      var token = model[0].token;
       NetDioUtil.initOptionWithToken(token);
       SpUtil.setString(Constants.token, token);
       SpUtil.setString(Constants.account, account);
-      cancel();
-      Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
+      _getUserInfo();
+      // Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
     }, failure: (String msg, int code) {
       cancel();
     });
@@ -89,12 +90,16 @@ class _LoginPageState extends State<LoginPage> {
 
   _getUserInfo() async {
     var appResponse =
-        await post<LoginEntity, LoginEntity>(serviceUrl['user_info']!, decodeType: LoginEntity(), data: {"ID": 0});
-    appResponse.when(success: (LoginEntity model) {
-      SpUtil.setString(Constants.headUrl, "");
-      SpUtil.setString(Constants.userName, "");
-      SpUtil.setString(Constants.userPhone, "");
-      SpUtil.setString(Constants.nickName, "");
+        await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+    appResponse.when(success: (List<UserInfoEntity>? model) {
+      var userInfo = model?[0];
+      if(userInfo != null) {
+        SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
+        SpUtil.setString(Constants.userName, userInfo.name ?? '');
+        SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
+        SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
+      }
+
       cancel();
       Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
     }, failure: (String msg, int code) {

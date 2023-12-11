@@ -108,7 +108,7 @@ class _TestPageState extends State<TestPage> {
             },
             text: StringConstant.testConfirm,
             color: ColorConstant.color3C94FD,
-            textStyle: const TextStyle(color: ColorConstant.color333333),
+            textStyle: const TextStyle(color: ColorConstant.white),
           ),
           IconsOutlineButton(
             onPressed: () {
@@ -116,7 +116,7 @@ class _TestPageState extends State<TestPage> {
               Navigator.of(context).pop();
             },
             text: StringConstant.testContinue,
-            textStyle: const TextStyle(color: ColorConstant.white),
+            textStyle: const TextStyle(color: ColorConstant.color333333),
           ),
         ],
     );

@@ -4,6 +4,7 @@ import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/machine_entity.dart';
+import '../../model/test_result_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
@@ -20,8 +21,7 @@ class TestResultPage extends StatefulWidget {
 
 class _TestResultPageState extends State<TestResultPage> {
   late String _dataId;
-  String point = '80';
-  List<MachineEntity> model = [];
+  String _point = '';
 
   @override
   void initState() {
@@ -32,11 +32,13 @@ class _TestResultPageState extends State<TestResultPage> {
 
   _getData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<TestResultEntity, List<TestResultEntity>?>(serviceUrl['test_result']!,
+        decodeType: TestResultEntity(), queryParameters: {"userId": 0});
+    appResponse.when(success: (List<TestResultEntity>? model) {
+      var data = model?[0].scores;
+      String score = data == null ? '无' : '$data';
       setState(() {
-        this.model.addAll(model);
+        _point = score;
       });
       cancel();
     }, failure: (String msg, int code) {
@@ -65,7 +67,7 @@ class _TestResultPageState extends State<TestResultPage> {
               Column(children: [
                 SizedBox(height: 50.w,),
                 Text(
-                  point,
+                  _point,
                   style: TextStyle(fontSize: 50.sp, color: ColorConstant.white, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 9.w,),

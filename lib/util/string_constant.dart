@@ -66,6 +66,8 @@ class StringConstant {
   static const String nickname = "用户昵称";
   static const String userPhone = "手机号";
   static const String userHead = "点击修改头像";
+  static const String camera = "拍照";
+  static const String gallery = "相册选择";
 
 
 }

@@ -189,8 +189,7 @@ class _MinePageState extends State<MinePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                // userName,
-                StringConstant.message,
+                userName,
                 maxLines: 1,
                 style: TextStyle(fontSize: 20.sp, color: ColorConstant.color333333, fontWeight: FontWeight.bold),
               ),
@@ -209,8 +208,7 @@ class _MinePageState extends State<MinePage> {
                         size: 10.w,
                       ),
                       Text(
-                        // userPhone,
-                        StringConstant.message,
+                        userPhone,
                         style: TextStyle(fontSize: 12.sp, color: ColorConstant.color3C94FD),
                       )
                     ],
