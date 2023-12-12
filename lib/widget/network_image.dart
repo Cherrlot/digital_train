@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../util/image_constant.dart';
+import '../util/image_util.dart';
 
 /// 定制CachedNetworkImage
 class NetworkImageWidget extends StatelessWidget {
@@ -18,7 +19,7 @@ class NetworkImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       cacheManager: CustomCacheManager.instance,
-      imageUrl: imageUrl,
+      imageUrl: ImageUtil.getNetImageUrl(imageUrl),
       placeholder: (context, url) => _defaultImage(),
       errorWidget: (context, url, error) => _defaultImage(),
       width: width,

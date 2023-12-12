@@ -17,6 +17,9 @@ const serviceUrl = {
   /// 获取用户信息
   'user_info': 'api/member/user/get',
 
+  /// 修改用户信息
+  'user_info_update': 'api/member/user/update',
+
   /// 获取考试成绩
   'test_result': 'api/test/result/get',
 

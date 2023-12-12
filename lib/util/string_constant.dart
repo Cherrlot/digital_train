@@ -44,6 +44,7 @@ class StringConstant {
   static const String testPoint = "考试得分";
   static const String hint = "提示？";
   static const String userInfo = "用户资料";
+  static const String userInfoEdit = "修改用户资料";
   static const String advice = "意见反馈";
   static const String adviceTitle = "问题和意见*";
   static const String adviceHint = "请写下您的建议，我们会尽快为您解决";
@@ -68,6 +69,8 @@ class StringConstant {
   static const String userHead = "点击修改头像";
   static const String camera = "拍照";
   static const String gallery = "相册选择";
+  static const String edit = "编辑";
+  static const String modify = "修改";
 
 
 }

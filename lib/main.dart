@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'routes/on_generate_route.dart';
 import 'routes/routes_data.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:event_bus/event_bus.dart';
+
+EventBus eventBus = EventBus();
 
 void main() {
   runApp(const MyApp());

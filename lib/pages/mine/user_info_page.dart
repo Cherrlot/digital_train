@@ -8,8 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-import '../../model/login_entity.dart';
 import '../../model/upload_image_entity.dart';
+import '../../model/user_info_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/constant.dart';
@@ -17,6 +17,7 @@ import '../../util/image_constant.dart';
 import '../../util/image_util.dart';
 import '../../util/string_constant.dart';
 import '../../widget/network_image.dart';
+import '../../main.dart';
 
 /// 用户资料
 class UserInfoPage extends StatefulWidget {
@@ -29,6 +30,7 @@ class UserInfoPage extends StatefulWidget {
 class _UserInfoPageState extends State<UserInfoPage> {
   late TextEditingController nickNameController;
   late TextEditingController phoneController;
+  UserInfoEntity? _userInfoEntity;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -39,6 +41,29 @@ class _UserInfoPageState extends State<UserInfoPage> {
     super.initState();
     nickNameController = TextEditingController(text: SpUtil.getString(Constants.nickName));
     phoneController = TextEditingController(text: SpUtil.getString(Constants.userPhone));
+    _getUserInfo();
+  }
+
+  _getUserInfo() async {
+    var cancel = BotToast.showLoading();
+    var appResponse =
+    await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+    appResponse.when(success: (List<UserInfoEntity>? model) {
+      var userInfo = model?[0];
+      _userInfoEntity = userInfo;
+      if(userInfo != null) {
+        SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
+        SpUtil.setString(Constants.userName, userInfo.name ?? '');
+        SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
+        SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
+        nickNameController.text = userInfo.nickname ?? userInfo.name ?? '';
+        phoneController.text = userInfo.phone ?? '';
+        _headImage = SpUtil.getString(Constants.headUrl) ?? '';
+      }
+      cancel();
+    }, failure: (String msg, int code) {
+      cancel();
+    });
   }
 
   @override
@@ -178,7 +203,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     appResponse.when(success: (List<UploadImageEntity>? model) {
       var imagePath = model?[0].url;
       setState(() {
-        _headImage = '$baseUrl$basePort$imagePath';
+        _headImage = imagePath;
       });
       cancel();
     }, failure: (String msg, int code) {
@@ -196,8 +221,8 @@ class _UserInfoPageState extends State<UserInfoPage> {
         IconsOutlineButton(
           onPressed: () {
             // 修改用户资料
-            String nickName = nickNameController.value.text;
-            String phone = phoneController.value.text;
+            Navigator.of(context).pop();
+            _updateUserInfo();
           },
           text: StringConstant.confirm,
           color: ColorConstant.color3C94FD,
@@ -215,6 +240,25 @@ class _UserInfoPageState extends State<UserInfoPage> {
     );
   }
 
+  /// 修改用户资料
+  _updateUserInfo() async {
+    var cancel = BotToast.showLoading();
+    String nickName = nickNameController.value.text;
+    String phone = phoneController.value.text;
+    var appResponse = await post<Object, Object?>(serviceUrl['user_info_update']!,
+        decodeType: Object(),
+        data: {"ID": _userInfoEntity?.iD, "nickName": nickName, 'phone': phone, 'headImage': _headImage}
+    );
+    appResponse.when(success: (data) {
+      BotToast.showText(text: '更新成功');
+      eventBus.fire(_userInfoEntity);
+
+      cancel();
+    }, failure: (msg, code) {
+      cancel();
+    },);
+  }
+
   Widget _button() {
     return ElevatedButton(
       onPressed: () {
@@ -228,7 +272,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             borderRadius: BorderRadius.circular(80.w),
           ))),
       child: Text(
-        StringConstant.confirm,
+        StringConstant.userInfoEdit,
         style: TextStyle(fontSize: 18.sp, color: ColorConstant.white, fontWeight: FontWeight.w500),
       ),
     );

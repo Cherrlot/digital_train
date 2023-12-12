@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:image_cropper/image_cropper.dart';
+import '../net/url_cons.dart';
 import 'color_constant.dart';
 import 'format_util.dart';
 
@@ -59,5 +60,16 @@ class ImageUtil {
       ],
     );
     return croppedFile;
+  }
+
+  /// 获取网络图片地址
+  static String getNetImageUrl(String? imagePath) {
+    if(imagePath == null || !imagePath.contains('.')) {
+      return '';
+    }
+    if(imagePath.contains('http')) {
+      return imagePath;
+    }
+    return '$baseUrl$basePort$imagePath';
   }
 }
