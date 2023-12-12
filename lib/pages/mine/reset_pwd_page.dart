@@ -1,18 +1,15 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:digital_train/util/sp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-import '../../model/machine_entity.dart';
 import '../../net/url_cons.dart';
-import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
-import '../../util/image_constant.dart';
+import '../../util/constant.dart';
 import '../../util/string_constant.dart';
-import '../../widget/gsy_input_widget.dart';
-import '../../widget/network_image.dart';
 
 /// 重置密码
 class ResetPwdPage extends StatefulWidget {
@@ -71,6 +68,12 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
     return ElevatedButton(
       onPressed: () {
         // 修改密码
+        String pwd = pwdConfirmNewController.value.text;
+        String pwdConfirm = newPwdController.value.text;
+        if(pwd != pwdConfirm) {
+          BotToast.showText(text: StringConstant.pwdConfirmError);
+          return;
+        }
         _showDialog();
       },
       style: ButtonStyle(
@@ -95,13 +98,8 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
         IconsOutlineButton(
           onPressed: () {
             // 修改密码
-            String pwd = pwdConfirmNewController.value.text;
-            String pwdConfirm = newPwdController.value.text;
-            if(pwd != pwdConfirm) {
-              BotToast.showText(text: StringConstant.pwdConfirmError);
-              Navigator.of(context).pop();
-              return;
-            }
+            Navigator.of(context).pop();
+            _updateUserPwd();
           },
           text: StringConstant.confirm,
           color: ColorConstant.color3C94FD,
@@ -117,6 +115,25 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
         ),
       ],
     );
+  }
+
+  /// 修改用户密码
+  _updateUserPwd() async {
+    var cancel = BotToast.showLoading();
+    String pwd = pwdController.value.text;
+    String pwdNew = newPwdController.value.text;
+    String account = SpUtil.getString(Constants.account) ?? '';
+    var appResponse = await post<Object, Object?>(serviceUrl['reset_pwd']!,
+        decodeType: Object(),
+        data: {"identifier": account, "oldCredential": pwd, 'credential': pwdNew}
+    );
+    appResponse.when(success: (data) {
+      BotToast.showText(text: StringConstant.modifySuccess);
+
+      cancel();
+    }, failure: (msg, code) {
+      cancel();
+    },);
   }
 
   Widget buildPasswordInputWidget(TextEditingController controller) {

@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:digital_train/model/login_entity.dart';
 import 'package:digital_train/model/machine_entity.dart';
+import 'package:digital_train/model/message_entity.dart';
 import 'package:digital_train/model/test_result_entity.dart';
 import 'package:digital_train/model/upload_image_entity.dart';
 import 'package:digital_train/model/user_info_entity.dart';
@@ -133,6 +134,9 @@ class JsonConvert {
     if (<MachineEntity>[] is M) {
       return data.map<MachineEntity>((Map<String, dynamic> e) => MachineEntity.fromJson(e)).toList() as M;
     }
+    if (<MessageEntity>[] is M) {
+      return data.map<MessageEntity>((Map<String, dynamic> e) => MessageEntity.fromJson(e)).toList() as M;
+    }
     if (<TestResultEntity>[] is M) {
       return data.map<TestResultEntity>((Map<String, dynamic> e) => TestResultEntity.fromJson(e)).toList() as M;
     }
@@ -164,6 +168,7 @@ class JsonConvertClassCollection {
   Map<String, JsonConvertFunction> convertFuncMap = {
     (LoginEntity).toString(): LoginEntity.fromJson,
     (MachineEntity).toString(): MachineEntity.fromJson,
+    (MessageEntity).toString(): MessageEntity.fromJson,
     (TestResultEntity).toString(): TestResultEntity.fromJson,
     (UploadImageEntity).toString(): UploadImageEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,

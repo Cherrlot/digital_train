@@ -250,7 +250,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
         data: {"ID": _userInfoEntity?.iD, "nickName": nickName, 'phone': phone, 'headImage': _headImage}
     );
     appResponse.when(success: (data) {
-      BotToast.showText(text: '更新成功');
+      BotToast.showText(text: StringConstant.modifySuccess);
       eventBus.fire(_userInfoEntity);
 
       cancel();

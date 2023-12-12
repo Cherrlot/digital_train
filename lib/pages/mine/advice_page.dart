@@ -2,15 +2,13 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-import '../../model/machine_entity.dart';
 import '../../net/url_cons.dart';
-import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
-import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
 import '../../widget/gsy_input_widget.dart';
-import '../../widget/network_image.dart';
 
 /// 意见反馈
 class AdvicePage extends StatefulWidget {
@@ -139,7 +137,23 @@ class _AdvicePageState extends State<AdvicePage> {
             ElevatedButton(
               onPressed: () {
                 // 提交反馈
-                BotToast.showText(text: '提交反馈');
+                String advice = adviceContentController.value.text;
+                String name = nameController.value.text;
+                String phone = phoneController.value.text;
+
+                if(advice.isEmpty) {
+                  BotToast.showText(text: StringConstant.adviceHint);
+                  return;
+                }
+                if(name.isEmpty) {
+                  BotToast.showText(text: StringConstant.nameHint);
+                  return;
+                }
+                if(phone.isEmpty) {
+                  BotToast.showText(text: StringConstant.contractHint);
+                  return;
+                }
+                _showDialog();
               },
               style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size(double.infinity, 40.w)),
@@ -154,6 +168,53 @@ class _AdvicePageState extends State<AdvicePage> {
             ),
           ])),
     );
+  }
+
+  _showDialog() {
+    Dialogs.materialDialog(
+      context: context,
+      title: StringConstant.hint,
+      msg: StringConstant.pwdResetHint,
+      actions: [
+        IconsOutlineButton(
+          onPressed: () {
+            // 提交意见
+            Navigator.of(context).pop();
+            _createFeedback();
+          },
+          text: StringConstant.confirm,
+          color: ColorConstant.color3C94FD,
+          textStyle: const TextStyle(color: ColorConstant.white),
+        ),
+        IconsOutlineButton(
+          onPressed: () {
+            // 取消
+            Navigator.of(context).pop();
+          },
+          text: StringConstant.cancel,
+          textStyle: const TextStyle(color: ColorConstant.color333333),
+        ),
+      ],
+    );
+  }
+
+  /// 提交意见
+  _createFeedback() async {
+    var cancel = BotToast.showLoading();
+    String advice = adviceContentController.value.text;
+    String name = nameController.value.text;
+    String phone = phoneController.value.text;
+    var appResponse = await post<Object, Object?>(serviceUrl['feedback']!,
+        decodeType: Object(),
+        data: {"name": name, "phone": phone, 'content': advice}
+    );
+    appResponse.when(success: (data) {
+      BotToast.showText(text: StringConstant.commitSuccess);
+      cancel();
+      Navigator.of(context).pop();
+    }, failure: (msg, code) {
+      cancel();
+    },);
   }
 
   AppBar _appBar() {

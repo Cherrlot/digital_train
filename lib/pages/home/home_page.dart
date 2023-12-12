@@ -1,10 +1,11 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:digital_train/util/color_constant.dart';
+import 'package:digital_train/util/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/machine_entity.dart';
+import '../../model/message_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/image_constant.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   List<String> imageList = List.empty(growable: true); //图片地址
   List<String> titleList = List.empty(growable: true); //标题集合
   List<MachineEntity> model = [];
+  List<MessageEntity> _bannerList = [];
 
   @override
   void initState() {
@@ -33,23 +35,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _getBannerData() async {
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<MessageEntity, List<MessageEntity>>(serviceUrl['notice']!,
+        decodeType: MessageEntity(), queryParameters: {"type": 1});
+    appResponse.when(success: (List<MessageEntity> model) {
       List<String> imageList = List.empty(growable: true); //图片地址
       List<String> titleList = List.empty(growable: true); //标题集合
-      var i = 0;
+      _bannerList = model;
       for (var element in model) {
-        if (i >= 4) {
-          break;
-        }
-        titleList.add(element.category);
-        if (i / 2 == 0) {
-          imageList.add("https://www.vipandroid.cn/ming/image/gan.png");
-        } else {
-          imageList.add("https://www.vipandroid.cn/ming/image/zao.png");
-        }
-        i++;
+        imageList.add(ImageUtil.getNetImageUrl(element.image));
+        titleList.add(element.title ?? '');
       }
       setState(() {
         this.imageList.addAll(imageList);
@@ -423,7 +417,7 @@ class _HomePageState extends State<HomePage> {
         imageList: imageList,
         bannerClick: (position) {
           //条目点击
-          Navigator.of(context).pushNamed(RouteName.bannerPage, arguments: {"param": model[position]});
+          Navigator.of(context).pushNamed(RouteName.bannerPage, arguments: {"param": _bannerList[position]});
         });
   }
 

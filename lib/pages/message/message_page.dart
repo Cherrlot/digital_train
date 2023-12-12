@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/message_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
@@ -19,7 +19,7 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  List<MachineEntity> model = [];
+  List<MessageEntity> model = [];
 
   @override
   void initState() {
@@ -32,9 +32,9 @@ class _MessagePageState extends State<MessagePage> {
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<MessageEntity, List<MessageEntity>>(serviceUrl['notice']!,
+        decodeType: MessageEntity(), queryParameters: {"type": 2});
+    appResponse.when(success: (List<MessageEntity> model) {
       setState(() {
         this.model.addAll(model);
       });
@@ -98,7 +98,7 @@ class _MessagePageState extends State<MessagePage> {
                 children: [
                   Text(
                     textAlign: TextAlign.left,
-                    data.category,
+                    data.title ?? '',
                     maxLines: 1,
                     style: TextStyle(fontSize: 16.sp, color: ColorConstant.mainTextColor),
                   ),
@@ -107,7 +107,7 @@ class _MessagePageState extends State<MessagePage> {
                   ),
                   Text(
                     textAlign: TextAlign.left,
-                    data.cdate,
+                    data.content ?? '',
                     maxLines: 1,
                     style: TextStyle(fontSize: 14.sp, color: ColorConstant.color999999),
                   ),

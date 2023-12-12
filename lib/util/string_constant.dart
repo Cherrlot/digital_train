@@ -49,9 +49,10 @@ class StringConstant {
   static const String adviceTitle = "问题和意见*";
   static const String adviceHint = "请写下您的建议，我们会尽快为您解决";
   static const String contract = "联系方式";
+  static const String contractHint = "请留下您的联系方式";
   static const String name = "姓   名：";
   static const String phone = "电   话：";
-  static const String nameHint = "请输入姓名";
+  static const String nameHint = "请输入您的姓名";
   static const String phoneHint = "请填写您的联系方式";
   static const String confirmNow = "立即提交";
   static const String resetPwd = "修改密码";
@@ -71,6 +72,8 @@ class StringConstant {
   static const String gallery = "相册选择";
   static const String edit = "编辑";
   static const String modify = "修改";
+  static const String commitSuccess = "提交成功";
+  static const String modifySuccess = "修改成功";
 
 
 }

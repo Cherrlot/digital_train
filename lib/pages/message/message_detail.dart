@@ -1,14 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
-import '../../net/url_cons.dart';
+import '../../model/message_entity.dart';
 import '../../util/color_constant.dart';
-import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
-import '../../widget/gsy_input_widget.dart';
 
 /// 消息详情
 class MessageDetailPage extends StatefulWidget {
@@ -20,7 +15,7 @@ class MessageDetailPage extends StatefulWidget {
 }
 
 class _MessageDetailPageState extends State<MessageDetailPage> {
-  late MachineEntity _data;
+  late MessageEntity _data;
 
   @override
   void initState() {
@@ -41,7 +36,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             children: [
               Text(
                 textAlign: TextAlign.center,
-                _data.category,
+                _data.title ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 14.sp, color: ColorConstant.black, fontWeight: FontWeight.bold),
@@ -49,7 +44,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               SizedBox(height: 22.w,),
               Text(
                 textAlign: TextAlign.start,
-                _data.category + _data.category + _data.category,
+                _data.content ?? '',
                 style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
               ),
             ],

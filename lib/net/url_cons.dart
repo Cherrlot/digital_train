@@ -23,6 +23,15 @@ const serviceUrl = {
   /// 获取考试成绩
   'test_result': 'api/test/result/get',
 
+  /// 修改密码
+  'reset_pwd': 'api/member/auth/update',
+
+  /// 意见反馈
+  'feedback': 'api/member/feedback/create',
+
+  /// 公告列表
+  'notice': 'api/member/notice/get',
+
   /// 上传图片
   'upload_image': '$baseUrl${basePort}upload/images',
 };
