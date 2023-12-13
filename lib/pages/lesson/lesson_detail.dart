@@ -1,10 +1,8 @@
 import 'package:better_player/better_player.dart';
+import 'package:digital_train/util/image_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
-import '../../util/string_constant.dart';
+import '../../model/lesson_entity.dart';
 
 /// 课程详情
 class LessonDetailPage extends StatefulWidget {
@@ -16,63 +14,26 @@ class LessonDetailPage extends StatefulWidget {
 }
 
 class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepAliveClientMixin{
-  // VideoPlayerController? _videoPlayerController;
-  // ChewieController? _chewieController;
-  BetterPlayerController? _betterPlayerController;
   /// 学习时长
   late DateTime _dateTime;
 
-  /// 视频文件id
-  late String _data;
+  /// 课程详情
+  late LessonEntity _data;
+
+  late String _title;
 
   /// 视频地址
-  // late String _url;
-  String _url = 'https://media.w3.org/2010/05/sintel/trailer.mp4';
+  late String _url;
+  // String _url = 'https://media.w3.org/2010/05/sintel/trailer.mp4';
   @override
   void initState() {
-    // BetterPlayerConfiguration betterPlayerConfiguration =
-    // BetterPlayerConfiguration(
-    //     aspectRatio: 16 / 9,
-    //     fit: BoxFit.contain,
-    //     autoDetectFullscreenDeviceOrientation: true);
-    // BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-    //     BetterPlayerDataSourceType.network, _url);
-    //     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-    // _betterPlayerController?.setupDataSource(dataSource);
-
     super.initState();
     _dateTime = DateTime.now();
     _data = widget.params["param"];
-    // setState(() {
-    //   _url = 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
-    // });
-
-    // _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(_url));
-    // _videoPlayerController?.initialize();
-    //
-    // _chewieController = ChewieController(
-    //   optionsTranslation: OptionsTranslation(playbackSpeedButtonText: StringConstant.playbackSpeed, cancelButtonText: StringConstant.cancel),
-    //   videoPlayerController: _videoPlayerController!,
-    //   autoInitialize: true,
-    //   aspectRatio: 16 / 9,
-    //   placeholder: const Center(
-    //     child: SizedBox(
-    //       height: 32,
-    //       width: 32,
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   ),
-    //   errorBuilder: (context, errorMessage) {
-    //     return Center(
-    //       child: Text(
-    //         errorMessage,
-    //         style: const TextStyle(color: Colors.white),
-    //       ),
-    //     );
-    //   },
-    //   allowedScreenSleep: false,
-    // );
-
+    setState(() {
+      _title = _data.title;
+      _url = ImageUtil.getNetImageUrl(_data.vedio);
+    });
   }
 
   @override
@@ -83,27 +44,9 @@ class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepA
       body: AspectRatio(
         aspectRatio: 16 / 9,
         child: BetterPlayer.network(_url),
-        // child: Chewie(controller: _chewieController!),
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _videoPlayerController?.dispose();
-  //   _chewieController?.dispose();
-  // }
-
-  // Widget _videoPlayer() {
-  //   return Chewie(
-  //       controller: ChewieController(
-  //     aspectRatio: 16 / 9, //屏幕高宽比
-  //     autoPlay: true, //是否自动播放
-  //     looping: false, //是否循环播放
-  //     videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(_url)),
-  //   ));
-  // }
 
   AppBar _appBar() {
     return AppBar(
@@ -112,9 +55,9 @@ class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepA
           Navigator.pop(context);
         },
       ),
-      title: const Text(
-        StringConstant.lessonDetail,
-        style: TextStyle(
+      title: Text(
+        _title,
+        style: const TextStyle(
           color: Colors.black,
         ),
       ),

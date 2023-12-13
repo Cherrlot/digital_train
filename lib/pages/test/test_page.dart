@@ -143,6 +143,7 @@ class _TestPageState extends State<TestPage> {
     var textColor = index == _selectPosition ? ColorConstant.white : ColorConstant.color333333;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         // 切换试题
         setState(() {
@@ -176,6 +177,7 @@ class _TestPageState extends State<TestPage> {
   Widget _getBottom(index) {
     return Expanded(
         child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               // 打开题目列表
               _showDialog();

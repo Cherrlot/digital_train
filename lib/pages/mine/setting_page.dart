@@ -99,6 +99,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _resetPwd() {
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // 修改密码
           Navigator.of(context).pushNamed(RouteName.resetPwdPage);

@@ -74,6 +74,7 @@ class _MessagePageState extends State<MessagePage> {
   Widget _itemView(index) {
     var data = model[index];
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // 消息详情
           Navigator.of(context).pushNamed(RouteName.messageDetailPage, arguments: {"param": data});

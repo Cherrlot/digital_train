@@ -84,6 +84,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
           decoration: const BoxDecoration(color: ColorConstant.backColor),
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   // 编辑头像
                   _showSelectImageDialog();

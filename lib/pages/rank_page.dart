@@ -127,6 +127,7 @@ class _RankPageState extends State<RankPage> {
       child: Row(
         children: [
           GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 ///学习排行榜
                 _changeType(0);
@@ -160,6 +161,7 @@ class _RankPageState extends State<RankPage> {
                 ],
               )),
           GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 ///通关排行榜
                 _changeType(1);

@@ -32,6 +32,12 @@ const serviceUrl = {
   /// 公告列表
   'notice': 'api/member/notice/get',
 
+  /// 课程类型列表
+  'lesson_type': 'api/course/type/get',
+
+  /// 课程列表
+  'lesson_list': 'api/course/item/get',
+
   /// 上传图片
   'upload_image': '$baseUrl${basePort}upload/images',
 };

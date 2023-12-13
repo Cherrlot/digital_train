@@ -102,6 +102,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
   Widget _itemView(index) {
     var data = model[index];
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // 知识详情
           Navigator.of(context).pushNamed(RouteName.knowledgeDetailPage, arguments: {"param": data});

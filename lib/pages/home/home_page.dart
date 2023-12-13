@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/lesson_entity.dart';
+import '../../model/lesson_type_entity.dart';
 import '../../model/message_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
@@ -24,24 +25,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> imageList = List.empty(growable: true); //图片地址
   List<String> titleList = List.empty(growable: true); //标题集合
-  List<MachineEntity> model = [];
-  List<MessageEntity> _bannerList = [];
+  final List<LessonEntity> _lessonList = [];
+  final List<MessageEntity> _bannerList = [];
+  final List<LessonTypeEntity> _lessonTypeList = [];
 
   @override
   void initState() {
     super.initState();
     _getBannerData();
+    _getLessonType();
     _loadLessons();
   }
 
+  /// 获取课程类型
+  _getLessonType() async {
+    var appResponse = await get<LessonTypeEntity, List<LessonTypeEntity>?>(
+      serviceUrl['lesson_type']!,
+      decodeType: LessonTypeEntity(),
+    );
+    appResponse.when(success: (List<LessonTypeEntity>? model) {
+      List<LessonTypeEntity> data = [];
+      model?.forEach((element) {
+        data.add(element);
+      });
+      setState(() {
+        _lessonTypeList.addAll(data);
+      });
+    }, failure: (String msg, int code) {
+      debugPrint("$msg, code: $code");
+    });
+  }
+
+  /// 获取公告
   Future _getBannerData() async {
-    var appResponse = await get<MessageEntity, List<MessageEntity>>(serviceUrl['notice']!,
+    var appResponse = await get<MessageEntity, List<MessageEntity>?>(serviceUrl['notice']!,
         decodeType: MessageEntity(), queryParameters: {"type": 1});
-    appResponse.when(success: (List<MessageEntity> model) {
+    appResponse.when(success: (List<MessageEntity>? model) {
       List<String> imageList = List.empty(growable: true); //图片地址
       List<String> titleList = List.empty(growable: true); //标题集合
-      _bannerList = model;
-      for (var element in model) {
+      _bannerList.addAll(model ?? []);
+      for (var element in model ?? []) {
         imageList.add(ImageUtil.getNetImageUrl(element.image));
         titleList.add(element.title ?? '');
       }
@@ -117,25 +140,38 @@ class _HomePageState extends State<HomePage> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: GridView.extent(
-          shrinkWrap: true,
-          maxCrossAxisExtent: 110.w,
-          crossAxisSpacing: 10.w,
-          mainAxisSpacing: 10.w,
-          childAspectRatio: 4,
-          children: titleList
-              .map((e) => Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.fromLTRB(5.w, 3.w, 5.w, 3.w),
-                  decoration: BoxDecoration(
-                      color: ColorConstant.colorF6F6F6, borderRadius: BorderRadius.all(Radius.circular(15.w))),
-                  child: Text(
-                    e,
-                    maxLines: 1,
-                    style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
-                  )))
-              .toList(),
-        ));
+        child: Container(
+            alignment: Alignment.centerLeft,
+            height: 30.w,
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: _lessonTypeItem,
+              scrollDirection: Axis.horizontal,
+              itemCount: _lessonTypeList.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 10.w,
+                );
+              },
+            )));
+  }
+
+  Widget _lessonTypeItem(context, index) {
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          // 根据类型查看课程
+        },
+        child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.fromLTRB(5.w, 3.w, 5.w, 3.w),
+            decoration:
+                BoxDecoration(color: ColorConstant.colorF6F6F6, borderRadius: BorderRadius.all(Radius.circular(15.w))),
+            child: Text(
+              _lessonTypeList[index].name,
+              maxLines: 1,
+              style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
+            )));
   }
 
   Widget _lessonGrid() {
@@ -147,25 +183,26 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: true,
             crossAxisSpacing: 6.w,
             crossAxisCount: 2,
-            children: model.map((e) => _lessonItem(e)).toList(),
+            children: _lessonList.map((e) => _lessonItem(e)).toList(),
           )),
     );
   }
 
-  Widget _lessonItem(MachineEntity data) {
+  Widget _lessonItem(LessonEntity data) {
     return Column(
       children: [
         GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
-              Navigator.of(context).pushNamed(RouteName.lessonDetailPage, arguments: {"param": data.id});
+              Navigator.of(context).pushNamed(RouteName.lessonDetailPage, arguments: {"param": data});
             },
             child: NetworkImageWidget(
               fit: BoxFit.cover,
-              imageUrl: data.descr,
+              imageUrl: data.cover,
               defaultImage: ImageConstant.imageLessonDefault,
             )),
         Text(
-          data.category,
+          data.title,
           maxLines: 1,
           style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
         )
@@ -173,20 +210,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// 获取课程列表
   _loadLessons() async {
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
-      for (var i = 0; i < model.length; i++) {
-        if (i % 2 == 0) {
-          model[i].descr = ("https://www.vipandroid.cn/ming/image/gan.png");
-        } else {
-          model[i].descr = ("");
-        }
-      }
-
+    var appResponse = await get<LessonEntity, List<LessonEntity>?>(serviceUrl['lesson_list']!,
+        decodeType: LessonEntity(), queryParameters: {"search": "self"});
+    appResponse.when(success: (List<LessonEntity>? model) {
       setState(() {
-        this.model.addAll(model);
+        _lessonList.addAll(model ?? []);
       });
     }, failure: (String msg, int code) {
       debugPrint("$msg, code: $code");
@@ -202,6 +232,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Expanded(
             child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   // 查看更多
                   Navigator.of(context).pushNamed(RouteName.lessonPage);
@@ -210,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '查看更多',
+                      StringConstant.seeMore,
                       style: TextStyle(fontSize: 13.sp, color: ColorConstant.color999999),
                     ),
                     Image(
@@ -235,6 +266,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///学习地图
                     Navigator.of(context).pushNamed(RouteName.studyMapPage);
@@ -254,6 +286,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///打开PK赛
                     Navigator.of(context).pushNamed(RouteName.pkPage);
@@ -273,6 +306,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///打开考试
                     Navigator.of(context).pushNamed(RouteName.testPage);
@@ -292,6 +326,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///打开课程分类
                     Navigator.of(context).pushNamed(RouteName.lessonPage);
@@ -319,6 +354,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///打开排行榜
                     Navigator.of(context).pushNamed(RouteName.rankPage);
@@ -338,6 +374,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///打开知识库
                     Navigator.of(context).pushNamed(RouteName.knowledgePage);
@@ -357,6 +394,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///学习地图
                     // BotToast.showText(text: '打开证书');
@@ -380,6 +418,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     ///学习地图
                     // BotToast.showText(text: '打开问卷');

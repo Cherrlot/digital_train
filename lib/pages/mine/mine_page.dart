@@ -95,6 +95,7 @@ class _MinePageState extends State<MinePage> {
                   height: 30.w,
                 ),
                 GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       // 编辑用户资料
                       Navigator.of(context).pushNamed(RouteName.userInfoPage);
@@ -134,6 +135,7 @@ class _MinePageState extends State<MinePage> {
 
   Widget _set() {
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // 设置
           Navigator.of(context).pushNamed(RouteName.settingPage);
@@ -174,6 +176,7 @@ class _MinePageState extends State<MinePage> {
 
   Widget _feed() {
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // 意见反馈
           Navigator.of(context).pushNamed(RouteName.advicePage);

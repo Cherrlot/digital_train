@@ -74,6 +74,7 @@ class StringConstant {
   static const String modify = "修改";
   static const String commitSuccess = "提交成功";
   static const String modifySuccess = "修改成功";
+  static const String seeMore = "查看更多";
 
 
 }

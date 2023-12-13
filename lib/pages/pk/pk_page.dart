@@ -73,6 +73,7 @@ class _PkPageState extends State<PkPage> {
   Widget _itemView(index) {
     var data = model[index];
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           // pk排行
           Navigator.of(context).pushNamed(RouteName.pkDetailPage, arguments: {"param": data.id});

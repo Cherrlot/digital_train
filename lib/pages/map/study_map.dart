@@ -109,6 +109,7 @@ class _StudyMapPageState extends State<StudyMapPage> {
             height: 100.w,
           ),
           GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 // 消息列表
                 Navigator.of(context).pushNamed(RouteName.messagePage);
@@ -126,6 +127,7 @@ class _StudyMapPageState extends State<StudyMapPage> {
             height: 20.w,
           ),
           GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 // 排行
                 Navigator.of(context).pushNamed(RouteName.rankPage);
