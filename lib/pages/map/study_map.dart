@@ -42,7 +42,7 @@ class _StudyMapPageState extends State<StudyMapPage> {
 
   _getStudyMap() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<StudyMapEntity, List<StudyMapEntity>?>(serviceUrl['study_map']!,
+    var appResponse = await get<StudyMapEntity, List<StudyMapEntity>?>(studyMap,
         decodeType: StudyMapEntity(), queryParameters: {"search": "self"});
     appResponse.when(success: (List<StudyMapEntity>? model) {
       int levelNum = 1;

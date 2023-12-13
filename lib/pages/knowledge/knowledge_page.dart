@@ -42,7 +42,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
+    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
       setState(() {

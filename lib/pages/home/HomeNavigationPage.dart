@@ -35,7 +35,7 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
 
   _getUserInfo() async {
     var appResponse =
-    await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+    await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
     appResponse.when(success: (List<UserInfoEntity>? model) {
       var userInfo = model?[0];
       if(userInfo != null) {

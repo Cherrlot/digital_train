@@ -123,7 +123,7 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
     String pwd = pwdController.value.text;
     String pwdNew = newPwdController.value.text;
     String account = SpUtil.getString(Constants.account) ?? '';
-    var appResponse = await post<Object, Object?>(serviceUrl['reset_pwd']!,
+    var appResponse = await post<Object, Object?>(resetPwd,
         decodeType: Object(),
         data: {"identifier": account, "oldCredential": pwd, 'credential': pwdNew}
     );

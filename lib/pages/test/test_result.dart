@@ -32,7 +32,7 @@ class _TestResultPageState extends State<TestResultPage> {
 
   _getData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<TestResultEntity, List<TestResultEntity>?>(serviceUrl['test_result']!,
+    var appResponse = await get<TestResultEntity, List<TestResultEntity>?>(testResult,
         decodeType: TestResultEntity(), queryParameters: {"userId": 0});
     appResponse.when(success: (List<TestResultEntity>? model) {
       var data = model?[0].scores;

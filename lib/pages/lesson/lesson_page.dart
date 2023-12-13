@@ -34,7 +34,7 @@ class _LessonPageState extends State<LessonPage> {
   _getLessonType() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse = await get<LessonTypeEntity, List<LessonTypeEntity>?>(
-      serviceUrl['lesson_type']!,
+      lessonType,
       decodeType: LessonTypeEntity(),
     );
     appResponse.when(success: (List<LessonTypeEntity>? model) {
@@ -59,7 +59,7 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   _getLessonList(String id, CancelFunc cancel) async {
-    var appResponse = await get<LessonEntity, List<LessonEntity>?>(serviceUrl['lesson_list']!,
+    var appResponse = await get<LessonEntity, List<LessonEntity>?>(lessonList,
         decodeType: LessonEntity(), queryParameters: {"search": "self", "type": id});
     appResponse.when(success: (List<LessonEntity>? model) {
       _lessonList.clear();

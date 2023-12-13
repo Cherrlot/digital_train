@@ -67,22 +67,16 @@ class _LoginPageState extends State<LoginPage> {
 
     /// 登录
     cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    // var appResponse = await post<LoginEntity, LoginEntity>(serviceUrl['app_login']!,
-        var appResponse = await post<LoginEntity, List<LoginEntity>>(serviceUrl['app_login']!,
+        var appResponse = await post<LoginEntity, List<LoginEntity>>(appLogin,
         decodeType: LoginEntity(),
-        // data: {"identifier": account, "credential": md5.convert(utf8.encode(pwd)).toString(), "loginType": "password"}
-        // data: {"account": account, "pwd": pwd}
         data: {"identifier": account, "credential": pwd}
         );
     appResponse.when(success: (List<LoginEntity> model) {
-    // appResponse.when(success: (LoginEntity model) {
-      // var token = model.token;
       var token = model[0].token;
       NetDioUtil.initOptionWithToken(token);
       SpUtil.setString(Constants.token, token);
       SpUtil.setString(Constants.account, account);
       _getUserInfo();
-      // Navigator.of(context).pushReplacementNamed(RouteName.homeNavigatePage);
     }, failure: (String msg, int code) {
       cancel();
     });
@@ -90,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _getUserInfo() async {
     var appResponse =
-        await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+        await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
     appResponse.when(success: (List<UserInfoEntity>? model) {
       var userInfo = model?[0];
       if(userInfo != null) {
@@ -116,7 +110,6 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
               height: ScreenUtil().statusBarHeight,

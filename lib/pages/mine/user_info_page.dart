@@ -47,7 +47,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   _getUserInfo() async {
     var cancel = BotToast.showLoading();
     var appResponse =
-    await get<UserInfoEntity, List<UserInfoEntity>?>(serviceUrl['user_info']!, decodeType: UserInfoEntity(), data: {"ID": 0});
+    await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
     appResponse.when(success: (List<UserInfoEntity>? model) {
       var userInfo = model?[0];
       _userInfoEntity = userInfo;
@@ -198,7 +198,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
       },
     );
 
-    var appResponse = await post<UploadImageEntity, List<UploadImageEntity>?>(serviceUrl['upload_image']!,
+    var appResponse = await post<UploadImageEntity, List<UploadImageEntity>?>(uploadImage,
         options: Options(contentType: 'multipart/form-data'), decodeType: UploadImageEntity(), data: formData);
 
     appResponse.when(success: (List<UploadImageEntity>? model) {
@@ -246,7 +246,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     var cancel = BotToast.showLoading();
     String nickName = nickNameController.value.text;
     String phone = phoneController.value.text;
-    var appResponse = await post<Object, Object?>(serviceUrl['user_info_update']!,
+    var appResponse = await post<Object, Object?>(userInfoUpdate,
         decodeType: Object(),
         data: {"ID": _userInfoEntity?.iD, "nickName": nickName, 'phone': phone, 'headImage': _headImage}
     );

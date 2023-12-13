@@ -33,7 +33,7 @@ class _RankPageState extends State<RankPage> {
 
   _getStudyData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
+    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
       _studyList = model;
@@ -48,7 +48,7 @@ class _RankPageState extends State<RankPage> {
   }
 
   _getLevelData() async {
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
+    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
       _levelList = model;

@@ -31,7 +31,8 @@ class _BannerDetailPageState extends State<BannerDetailPage> {
           width: double.infinity,
           height: double.infinity,
           alignment: Alignment.topCenter,
-          margin: EdgeInsets.all(30.w),
+          decoration: const BoxDecoration(color: ColorConstant.backColor),
+          padding: EdgeInsets.all(14.w),
           child: Column(
             children: [
               Text(
@@ -41,12 +42,16 @@ class _BannerDetailPageState extends State<BannerDetailPage> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 14.sp, color: ColorConstant.black, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 22.w,),
-              Text(
+              SizedBox(height: 10.w,),
+              Container(
+                  padding: EdgeInsets.all(10.w),
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+                  child: Text(
                 textAlign: TextAlign.start,
                 _data.content ?? '',
                 style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
-              ),
+              )),
             ],
           )),
     );

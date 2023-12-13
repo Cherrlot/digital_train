@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   /// 获取课程类型
   _getLessonType() async {
     var appResponse = await get<LessonTypeEntity, List<LessonTypeEntity>?>(
-      serviceUrl['lesson_type']!,
+      lessonType,
       decodeType: LessonTypeEntity(),
     );
     appResponse.when(success: (List<LessonTypeEntity>? model) {
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   /// 获取公告
   Future _getBannerData() async {
-    var appResponse = await get<MessageEntity, List<MessageEntity>?>(serviceUrl['notice']!,
+    var appResponse = await get<MessageEntity, List<MessageEntity>?>(notice,
         decodeType: MessageEntity(), queryParameters: {"type": 1});
     appResponse.when(success: (List<MessageEntity>? model) {
       List<String> imageList = List.empty(growable: true); //图片地址
@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage> {
 
   /// 获取课程列表
   _loadLessons() async {
-    var appResponse = await get<LessonEntity, List<LessonEntity>?>(serviceUrl['lesson_list']!,
+    var appResponse = await get<LessonEntity, List<LessonEntity>?>(lessonList,
         decodeType: LessonEntity(), queryParameters: {"search": "self"});
     appResponse.when(success: (List<LessonEntity>? model) {
       setState(() {

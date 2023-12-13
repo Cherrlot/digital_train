@@ -204,7 +204,7 @@ class _AdvicePageState extends State<AdvicePage> {
     String advice = adviceContentController.value.text;
     String name = nameController.value.text;
     String phone = phoneController.value.text;
-    var appResponse = await post<Object, Object?>(serviceUrl['feedback']!,
+    var appResponse = await post<Object, Object?>(feedback,
         decodeType: Object(),
         data: {"name": name, "phone": phone, 'content': advice}
     );
