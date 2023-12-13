@@ -33,6 +33,10 @@ UserInfoEntity $UserInfoEntityFromJson(Map<String, dynamic> json) {
   if (departmentid != null) {
     userInfoEntity.departmentid = departmentid;
   }
+  final int? level = jsonConvert.convert<int>(json['level']);
+  if (level != null) {
+    userInfoEntity.level = level;
+  }
   return userInfoEntity;
 }
 
@@ -45,6 +49,7 @@ Map<String, dynamic> $UserInfoEntityToJson(UserInfoEntity entity) {
   data['nickname'] = entity.nickname;
   data['role'] = entity.role;
   data['departmentId'] = entity.departmentid;
+  data['level'] = entity.level;
   return data;
 }
 
@@ -57,6 +62,7 @@ extension UserInfoEntityExtension on UserInfoEntity {
     String? nickname,
     String? role,
     String? departmentid,
+    int? level,
   }) {
     return UserInfoEntity()
       ..iD = iD ?? this.iD
@@ -65,6 +71,7 @@ extension UserInfoEntityExtension on UserInfoEntity {
       ..headImage = headImage ?? this.headImage
       ..nickname = nickname ?? this.nickname
       ..role = role ?? this.role
-      ..departmentid = departmentid ?? this.departmentid;
+      ..departmentid = departmentid ?? this.departmentid
+      ..level = level ?? this.level;
   }
 }

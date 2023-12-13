@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/study_map_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
@@ -22,11 +22,13 @@ class StudyMapPage extends StatefulWidget {
 }
 
 class _StudyMapPageState extends State<StudyMapPage> {
-  List<MachineEntity> model = [];
+  List<StudyMapEntity> model = [];
+
   /// 用户头像
   String headUrl = "";
   ScrollController scrollController = ScrollController();
-  /// 用户当前进度
+
+  /// 用户当前进度 从0开始
   int topicNum = 0;
 
   @override
@@ -40,12 +42,22 @@ class _StudyMapPageState extends State<StudyMapPage> {
 
   _getStudyMap() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(serviceUrl['machines']!,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<StudyMapEntity, List<StudyMapEntity>?>(serviceUrl['study_map']!,
+        decodeType: StudyMapEntity(), queryParameters: {"search": "self"});
+    appResponse.when(success: (List<StudyMapEntity>? model) {
+      int levelNum = 1;
+      model?.forEach((element) {
+        if (element.isCurrent) {
+          levelNum = element.level;
+        }
+      });
       setState(() {
-        this.model.addAll(model);
-        topicNum = 3;
+        this.model.addAll(model ?? []);
+        if (levelNum - 1 >= 0) {
+          topicNum = levelNum - 1;
+        } else {
+          topicNum = 0;
+        }
         // 将listview滚动到底部
         Future.delayed(const Duration(milliseconds: 500), () {
           scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -77,7 +89,11 @@ class _StudyMapPageState extends State<StudyMapPage> {
             Expanded(
                 child: Column(
               children: [
-                Expanded(child: _mapView()),
+                Expanded(
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                  child: _mapView(),
+                )),
                 SizedBox(
                   height: 98.w,
                 ),

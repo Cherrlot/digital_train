@@ -16,6 +16,7 @@ class UserInfoEntity extends BaseNetModel {
 	String? role;
 	@JSONField(name: "departmentId")
 	String? departmentid;
+	int? level;
 
 	UserInfoEntity();
 

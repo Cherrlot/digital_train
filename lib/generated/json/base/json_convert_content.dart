@@ -9,6 +9,8 @@ import 'package:digital_train/model/lesson_type_entity.dart';
 import 'package:digital_train/model/login_entity.dart';
 import 'package:digital_train/model/machine_entity.dart';
 import 'package:digital_train/model/message_entity.dart';
+import 'package:digital_train/model/stage_entity.dart';
+import 'package:digital_train/model/study_map_entity.dart';
 import 'package:digital_train/model/test_result_entity.dart';
 import 'package:digital_train/model/upload_image_entity.dart';
 import 'package:digital_train/model/user_info_entity.dart';
@@ -145,6 +147,12 @@ class JsonConvert {
     if (<MessageEntity>[] is M) {
       return data.map<MessageEntity>((Map<String, dynamic> e) => MessageEntity.fromJson(e)).toList() as M;
     }
+    if (<StageEntity>[] is M) {
+      return data.map<StageEntity>((Map<String, dynamic> e) => StageEntity.fromJson(e)).toList() as M;
+    }
+    if (<StudyMapEntity>[] is M) {
+      return data.map<StudyMapEntity>((Map<String, dynamic> e) => StudyMapEntity.fromJson(e)).toList() as M;
+    }
     if (<TestResultEntity>[] is M) {
       return data.map<TestResultEntity>((Map<String, dynamic> e) => TestResultEntity.fromJson(e)).toList() as M;
     }
@@ -179,6 +187,8 @@ class JsonConvertClassCollection {
     (LoginEntity).toString(): LoginEntity.fromJson,
     (MachineEntity).toString(): MachineEntity.fromJson,
     (MessageEntity).toString(): MessageEntity.fromJson,
+    (StageEntity).toString(): StageEntity.fromJson,
+    (StudyMapEntity).toString(): StudyMapEntity.fromJson,
     (TestResultEntity).toString(): TestResultEntity.fromJson,
     (UploadImageEntity).toString(): UploadImageEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
