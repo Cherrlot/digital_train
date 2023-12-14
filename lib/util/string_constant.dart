@@ -27,10 +27,13 @@ class StringConstant {
   static const String lessonSelect = "选课中心";
   static const String test = "考试题目";
   static const String testJudge = "判断题";
-  static const String testChoose = "选择题";
+  static const String testChoose = "单选题";
+  static const String testNulChoose = "多选题";
   static const String testRight = "正确";
   static const String testWrong = "错误";
   static const String testAll = "交卷";
+  static const String testNext = "下一题";
+  static const String testPre = "上一题";
   static const String sp = "/";
   static const String confirm = "确定";
   static const String cancel = "取消";

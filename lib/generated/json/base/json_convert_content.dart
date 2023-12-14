@@ -12,6 +12,7 @@ import 'package:digital_train/model/message_entity.dart';
 import 'package:digital_train/model/stage_entity.dart';
 import 'package:digital_train/model/study_map_entity.dart';
 import 'package:digital_train/model/test_result_entity.dart';
+import 'package:digital_train/model/test_topic_entity.dart';
 import 'package:digital_train/model/upload_image_entity.dart';
 import 'package:digital_train/model/user_info_entity.dart';
 
@@ -156,6 +157,18 @@ class JsonConvert {
     if (<TestResultEntity>[] is M) {
       return data.map<TestResultEntity>((Map<String, dynamic> e) => TestResultEntity.fromJson(e)).toList() as M;
     }
+    if (<TestTopicEntity>[] is M) {
+      return data.map<TestTopicEntity>((Map<String, dynamic> e) => TestTopicEntity.fromJson(e)).toList() as M;
+    }
+    if (<TestTopicItems>[] is M) {
+      return data.map<TestTopicItems>((Map<String, dynamic> e) => TestTopicItems.fromJson(e)).toList() as M;
+    }
+    if (<TestTopicItemsBank>[] is M) {
+      return data.map<TestTopicItemsBank>((Map<String, dynamic> e) => TestTopicItemsBank.fromJson(e)).toList() as M;
+    }
+    if (<TestTopicItemsOption>[] is M) {
+      return data.map<TestTopicItemsOption>((Map<String, dynamic> e) => TestTopicItemsOption.fromJson(e)).toList() as M;
+    }
     if (<UploadImageEntity>[] is M) {
       return data.map<UploadImageEntity>((Map<String, dynamic> e) => UploadImageEntity.fromJson(e)).toList() as M;
     }
@@ -190,6 +203,10 @@ class JsonConvertClassCollection {
     (StageEntity).toString(): StageEntity.fromJson,
     (StudyMapEntity).toString(): StudyMapEntity.fromJson,
     (TestResultEntity).toString(): TestResultEntity.fromJson,
+    (TestTopicEntity).toString(): TestTopicEntity.fromJson,
+    (TestTopicItems).toString(): TestTopicItems.fromJson,
+    (TestTopicItemsBank).toString(): TestTopicItemsBank.fromJson,
+    (TestTopicItemsOption).toString(): TestTopicItemsOption.fromJson,
     (UploadImageEntity).toString(): UploadImageEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
   };

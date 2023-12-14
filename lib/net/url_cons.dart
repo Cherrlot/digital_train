@@ -24,5 +24,7 @@ const lessonType = 'api/course/type/get';
 const lessonList = 'api/course/item/get';
 /// 学习地图
 const studyMap = 'api/course/map/get';
+/// 试卷获取
+const testGet = 'api/course/paper/get';
 
 

@@ -2,6 +2,8 @@ import 'package:digital_train/generated/json/base/json_convert_content.dart';
 import 'package:digital_train/model/study_map_entity.dart';
 import 'package:digital_train/model/stage_entity.dart';
 
+import 'package:flutter_nb_net/flutter_net.dart';
+
 
 StudyMapEntity $StudyMapEntityFromJson(Map<String, dynamic> json) {
   final StudyMapEntity studyMapEntity = StudyMapEntity();

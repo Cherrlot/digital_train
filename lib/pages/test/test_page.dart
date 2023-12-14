@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:digital_train/util/image_constant.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/test_topic_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
+import '../../util/constant.dart';
 import '../../util/string_constant.dart';
 import '../../widget/my_radio_option.dart';
 
@@ -22,24 +25,18 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
-  List<MachineEntity> testList = [];
+  List<TestTopicItems> testList = [];
   int _selectPosition = 0;
-  MachineEntity? selectTest;
+  /// 当前题目
+  TestTopicItems? selectTest;
 
   String? _groupValue;
 
   ValueChanged<String?> _valueChangedHandler() {
     return (value) => setState(() {
           BotToast.showText(text: '第${_selectPosition + 1}题，选择答案: $value');
-          _groupValue = null;
+          _groupValue = value;
 
-          // 下一题
-          if (testList.length - 1 > _selectPosition) {
-            _selectPosition++;
-            selectTest = testList[_selectPosition];
-          } else {
-            BotToast.showText(text: '考试完毕');
-          }
         });
   }
 
@@ -51,18 +48,40 @@ class _TestPageState extends State<TestPage> {
 
   _getTest() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<TestTopicEntity, List<TestTopicEntity>?>(testGet,
+        decodeType: TestTopicEntity(), queryParameters: {"search": "self"});
+    appResponse.when(success: (List<TestTopicEntity>? model) {
+      var data = model?[0];
+      _encodeInput(data);
       setState(() {
-        testList.addAll(model);
-        testList.addAll(model);
-        selectTest = model[0];
+        if(data != null) {
+          testList.addAll(data.items);
+          selectTest = data.items[0];
+        }
       });
       cancel();
     }, failure: (String msg, int code) {
       cancel();
       debugPrint("$msg, code: $code");
+    });
+  }
+
+  _encodeInput(TestTopicEntity? data) {
+    data?.items.forEach((element) {
+      var bank = element.bank;
+      var input = bank.input;
+      var decode = jsonDecode(input);
+      var type = decode['type'];
+      bank.type = type;
+      var list = decode['options'] as List;
+      List<TestTopicItemsOption> options = [];
+      for (var option in list) {
+        var temp = TestTopicItemsOption();
+        temp.value = option['value'];
+        temp.label = option['label'];
+        options.add(temp);
+      }
+      bank.options = options;
     });
   }
 
@@ -202,6 +221,36 @@ class _TestPageState extends State<TestPage> {
                       style: TextStyle(fontSize: 12.sp, color: ColorConstant.white, fontWeight: FontWeight.w500),
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      //上一题
+                      _lastTopic();
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ColorConstant.color3C94FD),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.w),
+                        ))),
+                    child: Text(
+                      StringConstant.testPre,
+                      style: TextStyle(fontSize: 12.sp, color: ColorConstant.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      //下一题
+                      _nextTopic();
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ColorConstant.color3C94FD),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.w),
+                        ))),
+                    child: Text(
+                      StringConstant.testNext,
+                      style: TextStyle(fontSize: 12.sp, color: ColorConstant.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
                   Row(
                     children: [
                       Image(
@@ -232,6 +281,30 @@ class _TestPageState extends State<TestPage> {
                 ],
               ),
             )));
+  }
+
+  /// 上一题
+  _lastTopic() {
+    setState(() {
+      if (0 < _selectPosition) {
+        _selectPosition--;
+        selectTest = testList[_selectPosition];
+      } else {
+        BotToast.showText(text: '当前为第一题');
+      }
+    });
+  }
+
+  /// 下一题
+  _nextTopic() {
+    setState(() {
+      if (testList.length - 1 > _selectPosition) {
+        _selectPosition++;
+        selectTest = testList[_selectPosition];
+      } else {
+        BotToast.showText(text: '当前为最后一题');
+      }
+    });
   }
 
   Widget _getContent(index) {
@@ -314,7 +387,7 @@ class _TestPageState extends State<TestPage> {
                 padding: EdgeInsets.all(2.w),
                 decoration: const BoxDecoration(color: ColorConstant.color663C94FD),
                 child: Text(
-                  StringConstant.testJudge,
+                  _getTopicType(),
                   style: TextStyle(fontSize: 10.sp, color: ColorConstant.color3C94FD),
                 ),
               )),
@@ -323,10 +396,22 @@ class _TestPageState extends State<TestPage> {
             width: 6.w,
           )),
           TextSpan(
-            text: selectTest?.category,
+            text: selectTest?.bank.descr,
             style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500, color: ColorConstant.color333333),
           ),
         ])));
+  }
+
+  String _getTopicType() {
+    var result = StringConstant.testJudge;
+    if(selectTest?.bank.category != Constants.typeJudge) {
+      if(selectTest?.bank.type == Constants.typeCheck) {
+        result = StringConstant.testNulChoose;
+      } else {
+        result = StringConstant.testChoose;
+      }
+    }
+    return result;
   }
 
   AppBar _appBar() {

@@ -9,6 +9,14 @@ class Constants {
   static const String userDepart = 'userDepart';
   static const String userPhone = 'userPhone';
 
+  /// 考试判断题类型
+  static const String typeJudge = 'truefalse';
+
+  /// 考试单选题类型
+  static const String typeRadio = 'radio';
+
+  /// 考试多选题类型
+  static const String typeCheck = 'checkbox';
 
 
   static const Color successBgColor = Color.fromRGBO(202, 237, 220, 1);
