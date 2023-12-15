@@ -44,6 +44,7 @@ class StringConstant {
   static const String testConfirm = "现在交卷";
   static const String testContinue = "继续答题";
   static const String testResult = "考试成绩";
+  static const String testResultBest = "历史最好成绩： ";
   static const String testPoint = "考试得分";
   static const String hint = "提示？";
   static const String userInfo = "用户资料";

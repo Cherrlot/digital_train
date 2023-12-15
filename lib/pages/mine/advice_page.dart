@@ -200,7 +200,7 @@ class _AdvicePageState extends State<AdvicePage> {
 
   /// 提交意见
   _createFeedback() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     String advice = adviceContentController.value.text;
     String name = nameController.value.text;
     String phone = phoneController.value.text;

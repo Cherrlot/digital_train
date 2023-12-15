@@ -11,7 +11,7 @@ const userInfo = 'api/member/user/get';
 /// 修改用户信息
 const userInfoUpdate = 'api/member/user/update';
 /// 获取考试成绩
-const testResult = 'api/test/result/get';
+const testResult = 'api/member/exam/get';
 /// 修改密码
 const resetPwd = 'api/member/auth/update';
 /// 意见反馈
@@ -26,5 +26,7 @@ const lessonList = 'api/course/item/get';
 const studyMap = 'api/course/map/get';
 /// 试卷获取
 const testGet = 'api/course/paper/get';
+/// 交卷
+const testCreate = 'api/member/exam/create';
 
 

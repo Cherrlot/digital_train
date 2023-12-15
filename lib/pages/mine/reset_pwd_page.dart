@@ -119,7 +119,7 @@ class _ResetPwdPageState extends State<ResetPwdPage> {
 
   /// 修改用户密码
   _updateUserPwd() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     String pwd = pwdController.value.text;
     String pwdNew = newPwdController.value.text;
     String account = SpUtil.getString(Constants.account) ?? '';

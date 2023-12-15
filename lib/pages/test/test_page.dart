@@ -26,6 +26,7 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   List<TestTopicItems> testList = [];
+  TestTopicEntity? _testTopicEntity;
   int _selectPosition = 0;
 
   /// 当前题目
@@ -65,6 +66,7 @@ class _TestPageState extends State<TestPage> {
         decodeType: TestTopicEntity(), queryParameters: {"search": "self"});
     appResponse.when(success: (List<TestTopicEntity>? model) {
       var data = model?[0];
+      _testTopicEntity = data;
       _encodeInput(data);
       setState(() {
         if (data != null) {
@@ -136,7 +138,8 @@ class _TestPageState extends State<TestPage> {
         IconsOutlineButton(
           onPressed: () {
             // 交卷
-            Navigator.of(context).pushReplacementNamed(RouteName.testResult, arguments: {"param": 'data.id'});
+            Navigator.of(context).pop();
+            _commitPaper();
           },
           text: StringConstant.testConfirm,
           color: ColorConstant.color3C94FD,
@@ -152,6 +155,56 @@ class _TestPageState extends State<TestPage> {
         ),
       ],
     );
+  }
+
+  /// 交卷
+  _commitPaper() async {
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
+    // 算分
+    int totalScore = 0;
+    for (var element in testList) {
+      var selection = element.bank.selections;
+      if(selection.isEmpty) {
+        // 没选答案
+        continue;
+      }
+
+      var answer = element.bank.answer;
+      var type = element.bank.type;
+      var score = element.bank.scores;
+      if(type == Constants.typeCheck) {
+        // 多选
+        List<String> answerList = answer.split(',');
+        if(answerList.length == selection.length) {
+          var result = true;
+          for (var temp in answerList) {
+            if(!selection.contains(temp)) {
+              result = false;
+              break;
+            }
+          }
+          if(result) {
+            totalScore = totalScore + score;
+          }
+        }
+      } else {
+        // 单选，判断
+        if(answer.contains(selection[0])) {
+          totalScore = totalScore + score;
+        }
+      }
+    }
+
+    var appResponse = await post<Object, Object?>(testCreate,
+        decodeType: Object(),
+        data: {"paperId": _testTopicEntity?.iD, "scores": totalScore}
+    );
+    appResponse.when(success: (Object? model) {
+      cancel();
+      Navigator.of(context).pushReplacementNamed(RouteName.testResult, arguments: {"param": '$totalScore'});
+    }, failure: (String msg, int code) {
+      cancel();
+    });
   }
 
   Widget _topicGrid() {

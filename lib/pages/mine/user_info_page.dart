@@ -45,7 +45,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   _getUserInfo() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse =
     await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
     appResponse.when(success: (List<UserInfoEntity>? model) {
@@ -187,7 +187,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   }
 
   _uploadImage(path) async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     String name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formData = FormData.fromMap(
       {
@@ -243,7 +243,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   /// 修改用户资料
   _updateUserInfo() async {
-    var cancel = BotToast.showLoading();
+    var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     String nickName = nickNameController.value.text;
     String phone = phoneController.value.text;
     var appResponse = await post<Object, Object?>(userInfoUpdate,

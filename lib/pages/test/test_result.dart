@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
 import '../../model/test_result_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
@@ -20,25 +19,28 @@ class TestResultPage extends StatefulWidget {
 }
 
 class _TestResultPageState extends State<TestResultPage> {
-  late String _dataId;
-  String _point = '';
+  /// 本次成绩
+  late String _score;
+
+  /// 历史最好成绩
+  String _bestScore = '';
 
   @override
   void initState() {
     super.initState();
-    _dataId = widget.params["param"];
+    _score = widget.params["param"];
     _getData();
   }
 
   _getData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     var appResponse = await get<TestResultEntity, List<TestResultEntity>?>(testResult,
-        decodeType: TestResultEntity(), queryParameters: {"userId": 0});
+        decodeType: TestResultEntity(), queryParameters: {"search": "self"});
     appResponse.when(success: (List<TestResultEntity>? model) {
       var data = model?[0].scores;
       String score = data == null ? '无' : '$data';
       setState(() {
-        _point = score;
+        _bestScore = score;
       });
       cancel();
     }, failure: (String msg, int code) {
@@ -59,23 +61,38 @@ class _TestResultPageState extends State<TestResultPage> {
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
-              Image(
-                width: ScreenUtil().screenWidth,
-                image: const AssetImage(ImageConstant.imageTestResult),
-                fit: BoxFit.fitWidth,
+              Stack(
+                alignment: AlignmentDirectional.bottomStart,
+                children: [
+                  Image(
+                    width: ScreenUtil().screenWidth,
+                    image: const AssetImage(ImageConstant.imageTestResult),
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Text(
+                    '${StringConstant.testResultBest} $_bestScore',
+                    style: TextStyle(fontSize: 17.sp, color: ColorConstant.white),
+                  ),
+                ],
               ),
-              Column(children: [
-                SizedBox(height: 50.w,),
-                Text(
-                  _point,
-                  style: TextStyle(fontSize: 50.sp, color: ColorConstant.white, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 9.w,),
-                Text(
-                  StringConstant.testPoint,
-                  style: TextStyle(fontSize: 17.sp, color: ColorConstant.white),
-                ),
-              ],)
+              Column(
+                children: [
+                  SizedBox(
+                    height: 50.w,
+                  ),
+                  Text(
+                    _score,
+                    style: TextStyle(fontSize: 50.sp, color: ColorConstant.white, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 9.w,
+                  ),
+                  Text(
+                    StringConstant.testPoint,
+                    style: TextStyle(fontSize: 17.sp, color: ColorConstant.white),
+                  ),
+                ],
+              )
             ],
           )),
     );
