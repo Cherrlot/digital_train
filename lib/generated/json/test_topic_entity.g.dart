@@ -128,6 +128,11 @@ TestTopicItemsBank $TestTopicItemsBankFromJson(Map<String, dynamic> json) {
   if (type != null) {
     testTopicItemsBank.type = type;
   }
+  final List<String>? selections = (json['selections'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<String>(e) as String).toList();
+  if (selections != null) {
+    testTopicItemsBank.selections = selections;
+  }
   final List<TestTopicItemsOption>? options = (json['options'] as List<dynamic>?)?.map(
           (e) => jsonConvert.convert<TestTopicItemsOption>(e) as TestTopicItemsOption).toList();
   if (options != null) {
@@ -146,6 +151,7 @@ Map<String, dynamic> $TestTopicItemsBankToJson(TestTopicItemsBank entity) {
   data['scores'] = entity.scores;
   data['typeId'] = entity.typeId;
   data['type'] = entity.type;
+  data['selections'] = entity.selections;
   data['options'] = entity.options.map((v) => v.toJson()).toList();
   return data;
 }
@@ -160,6 +166,7 @@ extension TestTopicItemsBankExtension on TestTopicItemsBank {
     int? scores,
     String? typeId,
     String? type,
+    List<String>? selections,
     List<TestTopicItemsOption>? options,
   }) {
     return TestTopicItemsBank()
@@ -171,6 +178,7 @@ extension TestTopicItemsBankExtension on TestTopicItemsBank {
       ..scores = scores ?? this.scores
       ..typeId = typeId ?? this.typeId
       ..type = type ?? this.type
+      ..selections = selections ?? this.selections
       ..options = options ?? this.options;
   }
 }

@@ -27,16 +27,29 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   List<TestTopicItems> testList = [];
   int _selectPosition = 0;
+
   /// 当前题目
   TestTopicItems? selectTest;
-
-  String? _groupValue;
 
   ValueChanged<String?> _valueChangedHandler() {
     return (value) => setState(() {
           BotToast.showText(text: '第${_selectPosition + 1}题，选择答案: $value');
-          _groupValue = value;
-
+          var bank = selectTest?.bank;
+          if(bank == null) {
+            return;
+          }
+          if(bank.type == Constants.typeCheck) {
+            // 多选
+            if(bank.selections.contains(value)) {
+              bank.selections.remove(value);
+            } else {
+              bank.selections.add(value ?? '');
+            }
+          } else {
+            // 单选，判断
+            bank.selections.clear();
+            bank.selections.add(value ?? '');
+          }
         });
   }
 
@@ -54,7 +67,7 @@ class _TestPageState extends State<TestPage> {
       var data = model?[0];
       _encodeInput(data);
       setState(() {
-        if(data != null) {
+        if (data != null) {
           testList.addAll(data.items);
           selectTest = data.items[0];
         }
@@ -100,7 +113,7 @@ class _TestPageState extends State<TestPage> {
               SizedBox(
                 height: 15.w,
               ),
-              _getContent(_selectPosition),
+              Expanded(child: _getContent(_selectPosition)),
               _getBottom(_selectPosition),
             ],
           )),
@@ -119,25 +132,25 @@ class _TestPageState extends State<TestPage> {
       context: context,
       title: StringConstant.hint,
       msg: StringConstant.testConfirmContent,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () {
-              // 交卷
-              Navigator.of(context).pushReplacementNamed(RouteName.testResult, arguments: {"param": 'data.id'});
-            },
-            text: StringConstant.testConfirm,
-            color: ColorConstant.color3C94FD,
-            textStyle: const TextStyle(color: ColorConstant.white),
-          ),
-          IconsOutlineButton(
-            onPressed: () {
-              // 取消
-              Navigator.of(context).pop();
-            },
-            text: StringConstant.testContinue,
-            textStyle: const TextStyle(color: ColorConstant.color333333),
-          ),
-        ],
+      actions: [
+        IconsOutlineButton(
+          onPressed: () {
+            // 交卷
+            Navigator.of(context).pushReplacementNamed(RouteName.testResult, arguments: {"param": 'data.id'});
+          },
+          text: StringConstant.testConfirm,
+          color: ColorConstant.color3C94FD,
+          textStyle: const TextStyle(color: ColorConstant.white),
+        ),
+        IconsOutlineButton(
+          onPressed: () {
+            // 取消
+            Navigator.of(context).pop();
+          },
+          text: StringConstant.testContinue,
+          textStyle: const TextStyle(color: ColorConstant.color333333),
+        ),
+      ],
     );
   }
 
@@ -166,8 +179,6 @@ class _TestPageState extends State<TestPage> {
       onTap: () {
         // 切换试题
         setState(() {
-          _groupValue = null;
-
           _selectPosition = index;
           selectTest = testList[_selectPosition];
         });
@@ -308,69 +319,27 @@ class _TestPageState extends State<TestPage> {
   }
 
   Widget _getContent(index) {
-    if (index % 2 == 1) {
-      return _getJudgeContent(index);
-    } else {
-      return _getChooseContent(index);
+    var bank = selectTest?.bank;
+    if (bank?.options == null) {
+      return const SizedBox();
     }
+    return _getOptionContent(bank!);
   }
 
-  /// 判断题
-  Widget _getJudgeContent(index) {
-    return Column(
-      children: [
-        MyRadioOption<String>(
-          value: 'A',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'A',
-          text: StringConstant.testRight,
-        ),
-        MyRadioOption<String>(
-          value: 'B',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'B',
-          text: StringConstant.testWrong,
-        ),
-      ],
-    );
-  }
-
-  /// 选择题
-  Widget _getChooseContent(index) {
-    return Column(
-      children: [
-        MyRadioOption<String>(
-          value: 'A',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'A',
-          text: StringConstant.testRight,
-        ),
-        MyRadioOption<String>(
-          value: 'B',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'B',
-          text: StringConstant.testWrong,
-        ),
-        MyRadioOption<String>(
-          value: 'C',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'C',
-          text: StringConstant.testRight,
-        ),
-        MyRadioOption<String>(
-          value: 'D',
-          groupValue: _groupValue,
-          onChanged: _valueChangedHandler(),
-          label: 'D',
-          text: StringConstant.testWrong,
-        ),
-      ],
-    );
+  /// 获取选项列表
+  Widget _getOptionContent(TestTopicItemsBank bank) {
+    var options = bank.options;
+    return ListView.builder(
+        itemCount: options.length,
+        itemBuilder: (context, index) {
+          return MyRadioOption<String>(
+            value: options[index].value,
+            groupValue: bank.selections,
+            onChanged: _valueChangedHandler(),
+            label: options[index].value,
+            text: options[index].label,
+          );
+        });
   }
 
   Widget _getTitle(index) {
@@ -404,8 +373,8 @@ class _TestPageState extends State<TestPage> {
 
   String _getTopicType() {
     var result = StringConstant.testJudge;
-    if(selectTest?.bank.category != Constants.typeJudge) {
-      if(selectTest?.bank.type == Constants.typeCheck) {
+    if (selectTest?.bank.category != Constants.typeJudge) {
+      if (selectTest?.bank.type == Constants.typeCheck) {
         result = StringConstant.testNulChoose;
       } else {
         result = StringConstant.testChoose;

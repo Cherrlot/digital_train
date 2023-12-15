@@ -74,6 +74,7 @@ class TestTopicItemsBank extends BaseNetModel {
   late int scores;
   late String typeId;
   late String type;
+  late List<String> selections;
   late List<TestTopicItemsOption> options;
 
   @override
@@ -90,6 +91,7 @@ class TestTopicItemsBank extends BaseNetModel {
       int? scores,
       String? typeId,
       String? type,
+        List<String>? selections,
       List<TestTopicItemsOption>? options})
       : iD = iD ?? '',
         descr = descr ?? '',
@@ -98,6 +100,7 @@ class TestTopicItemsBank extends BaseNetModel {
         category = category ?? '',
         scores = scores ?? 0,
         type = type ?? '',
+        selections = selections ?? [],
         options = options ?? [],
         typeId = typeId ?? '';
 

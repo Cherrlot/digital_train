@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MyRadioOption<T> extends StatelessWidget {
 
   final T value;
-  final T? groupValue;
+  final List<T>? groupValue;
   final String label;
   final String text;
+  /// 是否是多选，true：多选
+  final bool isCheck;
   final ValueChanged<T?> onChanged;
 
   const MyRadioOption({
@@ -15,10 +17,12 @@ class MyRadioOption<T> extends StatelessWidget {
     required this.label,
     required this.text,
     required this.onChanged,
+    this.isCheck = false,
   });
 
   Widget _buildLabel() {
-    final bool isSelected = value == groupValue;
+    final bool isSelected = groupValue?.contains(value) ?? false;
+    // final bool isSelected = value == groupValue;
 
     return Container(
       width: 30.w,
