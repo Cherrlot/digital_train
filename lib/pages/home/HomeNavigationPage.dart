@@ -1,6 +1,13 @@
+import 'dart:async';
+
+import 'package:bot_toast/bot_toast.dart';
+import 'package:digital_train/util/string_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 
+import '../../main.dart';
+import '../../model/lesson_entity.dart';
 import '../../model/user_info_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/constant.dart';
@@ -17,35 +24,62 @@ class HomeNavigationPage extends StatefulWidget {
 }
 
 class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
+  DateTime? _dateTime;
   int _bottomNavigationIndex = 0; //底部导航的索引
+  late StreamSubscription<LessonEntity> _sub;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if(_dateTime == null || DateTime.now().difference(_dateTime!) > const Duration(seconds: 2)) {
+            BotToast.showText(text: StringConstant.exit);
+            _dateTime = DateTime.now();
+          } else {
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          }
+        },
+        child: Scaffold(
         body: pages[_bottomNavigationIndex], //页面切换
         bottomNavigationBar: _bottomNavigationBar() //底部导航
-        );
+        ));
   }
 
   @override
   void initState() {
     super.initState();
     _getUserInfo();
+    _sub = eventBus.on<LessonEntity>().listen((event) {
+      _updateStudyTime(event);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sub.cancel();
+  }
+
+  _updateStudyTime(LessonEntity data) async {
+    await post<Object, Object?>(studyTime,
+        decodeType: Object(), data: {"courseId": data.iD, "duration": data.duration});
   }
 
   _getUserInfo() async {
     var appResponse =
-    await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
-    appResponse.when(success: (List<UserInfoEntity>? model) {
-      var userInfo = model?[0];
-      if(userInfo != null) {
-        SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
-        SpUtil.setString(Constants.userName, userInfo.name ?? '');
-        SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
-        SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
-      }
-    }, failure: (String msg, int code) {
-    });
+        await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
+    appResponse.when(
+        success: (List<UserInfoEntity>? model) {
+          var userInfo = model?[0];
+          if (userInfo != null) {
+            SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
+            SpUtil.setString(Constants.userName, userInfo.name ?? '');
+            SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
+            SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
+          }
+        },
+        failure: (String msg, int code) {});
   }
 
   //底部导航-样式

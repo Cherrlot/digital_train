@@ -20,6 +20,7 @@ class GSYInputWidget extends StatefulWidget {
 
   final TextEditingController? controller;
   final TextAlign textAlign;
+  final int? maxLines;
 
   GSYInputWidget(
       {Key? super.key,
@@ -30,6 +31,7 @@ class GSYInputWidget extends StatefulWidget {
         this.controller,
         this.textInputAction,
         this.onSubmitted,
+        this.maxLines = 1,
         this.obscureText = false, this.textAlign  = TextAlign.start, this.keyboardType});
 
   @override
@@ -48,7 +50,7 @@ class _GSYInputWidgetState extends State<GSYInputWidget> {
         onSubmitted: widget.onSubmitted,
         textAlign: widget.textAlign,
         keyboardType: widget.keyboardType,
-        maxLines: null,
+        maxLines: widget.maxLines,
         decoration: new InputDecoration(
           border: InputBorder.none,
           hintText: widget.hintText,

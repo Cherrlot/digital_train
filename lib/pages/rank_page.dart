@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
+import '../model/rank_entity.dart';
+import '../util/format_util.dart';
 import '../widget/network_image.dart';
 
 /// 排行榜
@@ -19,9 +20,9 @@ class RankPage extends StatefulWidget {
 }
 
 class _RankPageState extends State<RankPage> {
-  List<MachineEntity> model = [];
-  List<MachineEntity> _studyList = [];
-  List<MachineEntity> _levelList = [];
+  final List<RankEntity> _studyList = [];
+  final List<RankEntity> _levelList = [];
+  final List<RankEntity> model = [];
   int _selectIndex = 0;
 
   @override
@@ -33,13 +34,11 @@ class _RankPageState extends State<RankPage> {
 
   _getStudyData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
-      _studyList = model;
-      setState(() {
-        this.model.addAll(model);
-      });
+    var appResponse = await get<RankEntity, List<RankEntity>?>(studyTimeRank, decodeType: RankEntity());
+    appResponse.when(success: (List<RankEntity>? model) {
+      _studyList.addAll(model ?? []);
+      this.model.addAll(_studyList);
+      setState(() {});
       cancel();
     }, failure: (String msg, int code) {
       cancel();
@@ -48,10 +47,9 @@ class _RankPageState extends State<RankPage> {
   }
 
   _getLevelData() async {
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
-      _levelList = model;
+    var appResponse = await get<RankEntity, List<RankEntity>?>(studyMapRank, decodeType: RankEntity());
+    appResponse.when(success: (List<RankEntity>? model) {
+      _levelList.addAll(model ?? []);
     }, failure: (String msg, int code) {
       debugPrint("$msg, code: $code");
     });
@@ -75,10 +73,13 @@ class _RankPageState extends State<RankPage> {
               Stack(
                 alignment: AlignmentDirectional.bottomCenter,
                 children: [
-                Image(width: double.infinity, height: 215.w, image: const AssetImage(ImageConstant.imageRankBack)),
-                _typeView(),
-              ],),
-              SizedBox(height: 20.w,),
+                  Image(width: double.infinity, height: 215.w, image: const AssetImage(ImageConstant.imageRankBack)),
+                  _typeView(),
+                ],
+              ),
+              SizedBox(
+                height: 20.w,
+              ),
               Expanded(
                   child: Container(
                       padding: EdgeInsets.all(15.w),
@@ -103,11 +104,11 @@ class _RankPageState extends State<RankPage> {
   }
 
   _changeType(index) {
-    if(_selectIndex != index) {
+    if (_selectIndex != index) {
       setState(() {
         _selectIndex = index;
         model.clear();
-        if(_selectIndex == 0) {
+        if (_selectIndex == 0) {
           // 学习排行榜
           model.addAll(_studyList);
         } else {
@@ -167,33 +168,33 @@ class _RankPageState extends State<RankPage> {
                 _changeType(1);
               },
               child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Opacity(
-                opacity: _selectIndex == 1 ? 1 : 0,
-                child: Container(
-                  height: 36.w,
-                  width: 173.w,
-                  decoration: BoxDecoration(
-                      color: ColorConstant.color3C94FD, borderRadius: BorderRadius.all(Radius.circular(20.w))),
-                ),
-              ),
-              Container(
-                height: 36.w,
-                width: 173.w,
-                alignment: Alignment.center,
-                child: Text(
-                  textAlign: TextAlign.left,
-                  StringConstant.rankListLevel,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: _selectIndex == 1 ? ColorConstant.white : ColorConstant.color666666,
-                    fontWeight: _selectIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Opacity(
+                    opacity: _selectIndex == 1 ? 1 : 0,
+                    child: Container(
+                      height: 36.w,
+                      width: 173.w,
+                      decoration: BoxDecoration(
+                          color: ColorConstant.color3C94FD, borderRadius: BorderRadius.all(Radius.circular(20.w))),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          )),
+                  Container(
+                    height: 36.w,
+                    width: 173.w,
+                    alignment: Alignment.center,
+                    child: Text(
+                      textAlign: TextAlign.left,
+                      StringConstant.rankListLevel,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: _selectIndex == 1 ? ColorConstant.white : ColorConstant.color666666,
+                        fontWeight: _selectIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              )),
         ],
       ),
     );
@@ -213,11 +214,14 @@ class _RankPageState extends State<RankPage> {
           StringConstant.nickName,
           style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
         ),
-        Text(
-          textAlign: TextAlign.left,
-          _selectIndex == 0 ? StringConstant.studyNow : StringConstant.levelNow,
-          style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
-        ),
+        Container(
+            alignment: Alignment.center,
+            width: 100.w,
+            child: Text(
+              textAlign: TextAlign.left,
+              _selectIndex == 0 ? StringConstant.studyNow : StringConstant.levelNow,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
+            )),
       ],
     );
   }
@@ -251,7 +255,6 @@ class _RankPageState extends State<RankPage> {
     var data = model[index];
     return Container(
         alignment: Alignment.centerLeft,
-        width: 80.w,
         child: Row(
           children: [
             ClipOval(
@@ -259,15 +262,14 @@ class _RankPageState extends State<RankPage> {
               height: 24.w,
               width: 24.w,
               fit: BoxFit.cover,
-              imageUrl: '',
+              imageUrl: data.headImage,
               defaultImage: ImageConstant.imageHeadDefault,
             )),
             SizedBox(
               width: 4.w,
             ),
             Text(
-              // userPhone,
-              data.co,
+              data.getDisplayName(),
               style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
             ),
           ],
@@ -333,13 +335,14 @@ class _RankPageState extends State<RankPage> {
   }
 
   Widget _itemRight(index) {
+    var data = model[index];
     return Container(
       alignment: Alignment.center,
-      width: 40.w,
       height: 40.w,
+      width: 100.w,
       child: Text(
         textAlign: TextAlign.left,
-        "${index + 1}",
+        _selectIndex == 0 ? FormatUtil.durationTransform(data.duration) : data.level.toString(),
         maxLines: 1,
         style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.bold),
       ),

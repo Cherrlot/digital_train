@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../model/knowledge_entity.dart';
 import '../../model/machine_entity.dart';
 import '../../util/color_constant.dart';
 import '../../util/string_constant.dart';
@@ -15,7 +16,7 @@ class KnowledgeDetailPage extends StatefulWidget {
 }
 
 class _KnowledgeDetailPageState extends State<KnowledgeDetailPage> {
-  late MachineEntity _data;
+  late KnowledgeArticles _data;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _KnowledgeDetailPageState extends State<KnowledgeDetailPage> {
             children: [
               Text(
                 textAlign: TextAlign.center,
-                _data.category ?? '',
+                _data.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 14.sp, color: ColorConstant.black, fontWeight: FontWeight.bold),
@@ -49,7 +50,7 @@ class _KnowledgeDetailPageState extends State<KnowledgeDetailPage> {
                   decoration: BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                   child: Text(
                     textAlign: TextAlign.start,
-                    _data.category ?? '',
+                    _data.content,
                     style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
                   )),
             ],

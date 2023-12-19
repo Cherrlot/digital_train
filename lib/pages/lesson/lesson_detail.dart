@@ -1,4 +1,6 @@
 import 'package:better_player/better_player.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:digital_train/main.dart';
 import 'package:digital_train/util/image_util.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class LessonDetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _LessonDetailPageState();
 }
 
-class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepAliveClientMixin{
+class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepAliveClientMixin {
   /// 学习时长
   late DateTime _dateTime;
 
@@ -24,6 +26,7 @@ class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepA
 
   /// 视频地址
   late String _url;
+
   // String _url = 'https://media.w3.org/2010/05/sintel/trailer.mp4';
   @override
   void initState() {
@@ -39,13 +42,20 @@ class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return PopScope(
+        onPopInvoked: (didPop) {
+          int time = DateTime.now().difference(_dateTime).inMinutes;
+          if(time > 0) {
+            eventBus.fire(LessonEntity(duration: time, iD: _data.iD));
+          }
+        },
+        child: Scaffold(
       appBar: _appBar(),
       body: AspectRatio(
         aspectRatio: 16 / 9,
         child: BetterPlayer.network(_url),
       ),
-    );
+    ));
   }
 
   AppBar _appBar() {

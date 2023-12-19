@@ -28,5 +28,13 @@ const studyMap = 'api/course/map/get';
 const testGet = 'api/course/paper/get';
 /// 交卷
 const testCreate = 'api/member/exam/create';
+/// 知识库
+const knowledgeList = 'api/course/tag/get';
+/// 学习时长
+const studyTime = 'api/member/course/create';
+/// 学习排行榜
+const studyTimeRank = 'api/member/course/get';
+/// 通关排行榜
+const studyMapRank = 'api/member/user/get';
 
 

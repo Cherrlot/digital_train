@@ -8,7 +8,6 @@ import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
-import '../../widget/network_image.dart';
 
 /// pk榜单详情
 class PkDetailPage extends StatefulWidget {
@@ -37,7 +36,6 @@ class _PkDetailPageState extends State<PkDetailPage> {
         decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
     appResponse.when(success: (List<MachineEntity> model) {
       setState(() {
-        pkType = model[0].co;
         this.model.addAll(model);
       });
       cancel();
@@ -100,14 +98,22 @@ class _PkDetailPageState extends State<PkDetailPage> {
         ),
         Text(
           textAlign: TextAlign.left,
-          StringConstant.nickName,
+          StringConstant.department,
           style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
         ),
         Text(
           textAlign: TextAlign.left,
-          pkType,
+          StringConstant.nickName,
           style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
         ),
+        Container(
+            alignment: Alignment.center,
+            width: 100.w,
+            child: Text(
+              textAlign: TextAlign.left,
+              StringConstant.data,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
+            )),
       ],
     );
   }
@@ -122,6 +128,11 @@ class _PkDetailPageState extends State<PkDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _itemLeft(index),
+            Text(
+              textAlign: TextAlign.left,
+              StringConstant.department,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
+            ),
             _itemMiddle(index),
             _itemRight(index),
           ],
@@ -142,17 +153,17 @@ class _PkDetailPageState extends State<PkDetailPage> {
         width: 80.w,
         child: Row(
           children: [
-            ClipOval(
-                child: NetworkImageWidget(
-              height: 24.w,
-              width: 24.w,
-              fit: BoxFit.cover,
-              imageUrl: '',
-              defaultImage: ImageConstant.imageHeadDefault,
-            )),
-            SizedBox(
-              width: 4.w,
-            ),
+            // ClipOval(
+            //     child: NetworkImageWidget(
+            //   height: 24.w,
+            //   width: 24.w,
+            //   fit: BoxFit.cover,
+            //   imageUrl: '',
+            //   defaultImage: ImageConstant.imageHeadDefault,
+            // )),
+            // SizedBox(
+            //   width: 4.w,
+            // ),
             Text(
               // userPhone,
               data.co,
@@ -223,7 +234,7 @@ class _PkDetailPageState extends State<PkDetailPage> {
   Widget _itemRight(index) {
     return Container(
       alignment: Alignment.center,
-      width: 40.w,
+      width: 100.w,
       height: 40.w,
       child: Text(
         textAlign: TextAlign.left,

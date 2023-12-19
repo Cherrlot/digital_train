@@ -79,6 +79,10 @@ class StringConstant {
   static const String commitSuccess = "提交成功";
   static const String modifySuccess = "修改成功";
   static const String seeMore = "查看更多";
+  static const String exit = "再按一次退出程序";
+  static const String minutes = "分钟";
+  static const String data = "数据";
+  static const String department = "部门";
 
 
 }

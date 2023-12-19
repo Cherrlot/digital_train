@@ -32,11 +32,11 @@ class _MessagePageState extends State<MessagePage> {
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<MessageEntity, List<MessageEntity>>(notice,
+    var appResponse = await get<MessageEntity, List<MessageEntity>?>(notice,
         decodeType: MessageEntity(), queryParameters: {"type": 2});
-    appResponse.when(success: (List<MessageEntity> model) {
+    appResponse.when(success: (List<MessageEntity>? model) {
       setState(() {
-        this.model.addAll(model);
+        this.model.addAll(model ?? []);
       });
       if(showLoading) {
         cancel!();

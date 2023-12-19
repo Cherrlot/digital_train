@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/knowledge_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
 import '../../util/string_constant.dart';
-import '../../widget/gsy_input_widget.dart';
 
 /// 知识库
 class KnowledgePage extends StatefulWidget {
@@ -20,7 +19,7 @@ class KnowledgePage extends StatefulWidget {
 }
 
 class _KnowledgePageState extends State<KnowledgePage> {
-  List<MachineEntity> model = [];
+  final List<KnowledgeArticles> _knowledgeList = [];
   late TextEditingController searchController;
 
   @override
@@ -37,16 +36,20 @@ class _KnowledgePageState extends State<KnowledgePage> {
   }
 
   _getKnowledge(bool showLoading) async {
+    _knowledgeList.clear();
     var search = searchController.value.text;
     CancelFunc? cancel;
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<KnowledgeEntity, List<KnowledgeEntity>?>(knowledgeList,
+        decodeType: KnowledgeEntity(), queryParameters: {"name": search});
+    appResponse.when(success: (List<KnowledgeEntity>? model) {
+      if(model != null && model.isNotEmpty) {
+        var data = model[0];
+        _knowledgeList.addAll(data.articles);
+      }
       setState(() {
-        this.model.addAll(model);
       });
       if(showLoading) {
         cancel!();
@@ -74,19 +77,22 @@ class _KnowledgePageState extends State<KnowledgePage> {
                   width: double.infinity,
                   decoration:
                       BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(15.w))),
-                  child: GSYInputWidget(
-                    hintText: StringConstant.search,
-                    iconData: ImageConstant.ICON_SEARCH,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: StringConstant.search,
+                      icon: Icon(ImageConstant.ICON_SEARCH),
+                    ),
                     controller: searchController,
                     textInputAction: TextInputAction.search,
                     onSubmitted: (_) => _getKnowledge(true),
-                    textStyle: TextStyle(fontSize: 14.sp, color: ColorConstant.color999999),
+                    style: TextStyle(fontSize: 14.sp, color: ColorConstant.color999999),
                   )),
               Expanded(
                   child: ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: model.length,
+                      itemCount: _knowledgeList.length,
                       itemBuilder: (context, index) {
                         return _itemView(index);
                       })),
@@ -100,7 +106,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
   }
 
   Widget _itemView(index) {
-    var data = model[index];
+    var data = _knowledgeList[index];
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -119,7 +125,7 @@ class _KnowledgePageState extends State<KnowledgePage> {
                 children: [
                   Text(
                     textAlign: TextAlign.left,
-                    data.category,
+                    data.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 14.sp, color: ColorConstant.black, fontWeight: FontWeight.bold),
@@ -129,7 +135,9 @@ class _KnowledgePageState extends State<KnowledgePage> {
                   ),
                   Text(
                     textAlign: TextAlign.left,
-                    data.category + data.category,
+                    data.content,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
                   ),
                 ],

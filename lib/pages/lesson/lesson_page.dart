@@ -59,10 +59,10 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   _getLessonList(String id, CancelFunc cancel) async {
+    _lessonList.clear();
     var appResponse = await get<LessonEntity, List<LessonEntity>?>(lessonList,
         decodeType: LessonEntity(), queryParameters: {"search": "self", "type": id});
     appResponse.when(success: (List<LessonEntity>? model) {
-      _lessonList.clear();
       setState(() {
         _lessonList.addAll(model ?? []);
       });
