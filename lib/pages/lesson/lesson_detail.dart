@@ -1,8 +1,7 @@
-import 'package:better_player/better_player.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:digital_train/main.dart';
 import 'package:digital_train/util/image_util.dart';
 import 'package:flutter/material.dart';
+import 'package:better_player_plus/better_player_plus.dart';
 
 import '../../model/lesson_entity.dart';
 

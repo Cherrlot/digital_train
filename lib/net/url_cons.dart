@@ -36,5 +36,7 @@ const studyTime = 'api/member/course/create';
 const studyTimeRank = 'api/member/course/get';
 /// 通关排行榜
 const studyMapRank = 'api/member/user/get';
+/// pk
+const pkList = 'api/member/ranking/get';
 
 

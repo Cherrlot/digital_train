@@ -10,6 +10,7 @@ import 'package:digital_train/model/lesson_type_entity.dart';
 import 'package:digital_train/model/login_entity.dart';
 import 'package:digital_train/model/machine_entity.dart';
 import 'package:digital_train/model/message_entity.dart';
+import 'package:digital_train/model/pk_list_entity.dart';
 import 'package:digital_train/model/rank_entity.dart';
 import 'package:digital_train/model/stage_entity.dart';
 import 'package:digital_train/model/study_map_entity.dart';
@@ -156,6 +157,9 @@ class JsonConvert {
     if (<MessageEntity>[] is M) {
       return data.map<MessageEntity>((Map<String, dynamic> e) => MessageEntity.fromJson(e)).toList() as M;
     }
+    if (<PkListEntity>[] is M) {
+      return data.map<PkListEntity>((Map<String, dynamic> e) => PkListEntity.fromJson(e)).toList() as M;
+    }
     if (<RankEntity>[] is M) {
       return data.map<RankEntity>((Map<String, dynamic> e) => RankEntity.fromJson(e)).toList() as M;
     }
@@ -213,6 +217,7 @@ class JsonConvertClassCollection {
     (LoginEntity).toString(): LoginEntity.fromJson,
     (MachineEntity).toString(): MachineEntity.fromJson,
     (MessageEntity).toString(): MessageEntity.fromJson,
+    (PkListEntity).toString(): PkListEntity.fromJson,
     (RankEntity).toString(): RankEntity.fromJson,
     (StageEntity).toString(): StageEntity.fromJson,
     (StudyMapEntity).toString(): StudyMapEntity.fromJson,

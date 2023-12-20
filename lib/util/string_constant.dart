@@ -83,6 +83,9 @@ class StringConstant {
   static const String minutes = "分钟";
   static const String data = "数据";
   static const String department = "部门";
+  static const String updatePermission = "没有必要的权限，请赋予权限后再试";
+  static const String updateApp = "发现新版本";
+  static const String versionInfo = "版本信息";
 
 
 }

@@ -1,5 +1,7 @@
 import 'package:digital_train/generated/json/base/json_convert_content.dart';
 import 'package:digital_train/model/rank_entity.dart';
+import 'package:flutter_nb_net/flutter_net.dart';
+
 
 RankEntity $RankEntityFromJson(Map<String, dynamic> json) {
   final RankEntity rankEntity = RankEntity();

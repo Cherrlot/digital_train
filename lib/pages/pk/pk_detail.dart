@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/pk_list_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
 import '../../util/image_constant.dart';
@@ -20,7 +20,7 @@ class PkDetailPage extends StatefulWidget {
 
 class _PkDetailPageState extends State<PkDetailPage> {
   late String _dataId;
-  List<MachineEntity> model = [];
+  List<PkListEntity> model = [];
   String pkType = '';
 
   @override
@@ -32,11 +32,11 @@ class _PkDetailPageState extends State<PkDetailPage> {
 
   _getData() async {
     var cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    var appResponse = await get<PkListEntity, List<PkListEntity>?>(pkList,
+        decodeType: PkListEntity(), queryParameters: {"category": _dataId});
+    appResponse.when(success: (List<PkListEntity>? model) {
       setState(() {
-        this.model.addAll(model);
+        this.model.addAll(model?? []);
       });
       cancel();
     }, failure: (String msg, int code) {
@@ -130,7 +130,7 @@ class _PkDetailPageState extends State<PkDetailPage> {
             _itemLeft(index),
             Text(
               textAlign: TextAlign.left,
-              StringConstant.department,
+              model[index].department,
               style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
             ),
             _itemMiddle(index),
@@ -148,29 +148,13 @@ class _PkDetailPageState extends State<PkDetailPage> {
 
   Widget _itemMiddle(index) {
     var data = model[index];
-    return Container(
-      alignment: Alignment.centerLeft,
+    return SizedBox(
         width: 80.w,
-        child: Row(
-          children: [
-            // ClipOval(
-            //     child: NetworkImageWidget(
-            //   height: 24.w,
-            //   width: 24.w,
-            //   fit: BoxFit.cover,
-            //   imageUrl: '',
-            //   defaultImage: ImageConstant.imageHeadDefault,
-            // )),
-            // SizedBox(
-            //   width: 4.w,
-            // ),
-            Text(
-              // userPhone,
-              data.co,
-              style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
-            ),
-          ],
-        ));
+        child: Text(
+          textAlign: TextAlign.center,
+          data.nickname,
+          style: TextStyle(fontSize: 12.sp, color: ColorConstant.color666666),
+        ),);
   }
 
   Widget _itemLeft(index) {
@@ -232,13 +216,14 @@ class _PkDetailPageState extends State<PkDetailPage> {
   }
 
   Widget _itemRight(index) {
+    var data = model[index];
     return Container(
       alignment: Alignment.center,
       width: 100.w,
       height: 40.w,
       child: Text(
         textAlign: TextAlign.left,
-        "${index + 1}",
+        data.scores.toString(),
         maxLines: 1,
         style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.bold),
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../net/net_util.dart';
 import '../../routes/route_name.dart';
@@ -21,6 +22,21 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  String? _version;
+
+  @override
+  void initState() {
+    super.initState();
+    _getVersionInfo();
+  }
+
+  _getVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _version = packageInfo.version;
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +52,12 @@ class _SettingPageState extends State<SettingPage> {
                   decoration:
                       BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                   child: _resetPwd()),
+              SizedBox(height: 15.w,),
+              Container(
+                  padding: EdgeInsets.all(15.w),
+                  decoration:
+                      BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
+                  child: _versionWidget()),
               SizedBox(
                 height: 488.w,
               ),
@@ -116,6 +138,39 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Text(
               StringConstant.resetPwd,
+              maxLines: 1,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.w500),
+            ),
+            Expanded(
+                child: Image(
+              alignment: Alignment.centerRight,
+              image: const AssetImage(ImageConstant.imageBackMine),
+              width: 12.w,
+              height: 12.w,
+            ))
+          ],
+        ));
+  }
+
+  Widget _versionWidget() {
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          // 版本信息
+          Navigator.of(context).pushNamed(RouteName.resetPwdPage);
+        },
+        child: Row(
+          children: [
+            Image(
+              image: const AssetImage(ImageConstant.imageVersion),
+              width: 19.w,
+              height: 19.w,
+            ),
+            SizedBox(
+              width: 8.w,
+            ),
+            Text(
+              _version?? StringConstant.versionInfo,
               maxLines: 1,
               style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.w500),
             ),

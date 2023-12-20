@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../model/machine_entity.dart';
+import '../../model/pk_list_entity.dart';
 import '../../net/url_cons.dart';
 import '../../routes/route_name.dart';
 import '../../util/color_constant.dart';
@@ -18,7 +18,7 @@ class PkPage extends StatefulWidget {
 }
 
 class _PkPageState extends State<PkPage> {
-  List<MachineEntity> model = [];
+  final List<PkListEntity> _pkList = [];
 
   @override
   void initState() {
@@ -31,11 +31,12 @@ class _PkPageState extends State<PkPage> {
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<MachineEntity, List<MachineEntity>>(lessonType,
-        decodeType: MachineEntity(), queryParameters: {"orderby": "no"});
-    appResponse.when(success: (List<MachineEntity> model) {
+    _pkList.clear();
+    var appResponse = await get<PkListEntity, List<PkListEntity>?>(pkList,
+        decodeType: PkListEntity(),queryParameters: {"search": "category"});
+    appResponse.when(success: (List<PkListEntity>? model) {
       setState(() {
-        this.model.addAll(model);
+        _pkList.addAll(model?? []);
       });
       if(showLoading) {
         cancel!();
@@ -59,7 +60,7 @@ class _PkPageState extends State<PkPage> {
               child: ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: model.length,
+                  itemCount: _pkList.length,
                   itemBuilder: (context, index) {
                     return _itemView(index);
                   }))),
@@ -71,12 +72,12 @@ class _PkPageState extends State<PkPage> {
   }
 
   Widget _itemView(index) {
-    var data = model[index];
+    var data = _pkList[index];
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
           // pk排行
-          Navigator.of(context).pushNamed(RouteName.pkDetailPage, arguments: {"param": data.id});
+          Navigator.of(context).pushNamed(RouteName.pkDetailPage, arguments: {"param": data.category});
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(9.w, 10.w, 9.w, 10.w),
