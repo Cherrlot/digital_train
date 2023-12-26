@@ -62,6 +62,9 @@ class RouteName {
   /// 设置
   static const String settingPage = '/setting';
 
+  /// 版本信息
+  static const String versionPage = '/versionPage';
+
   /// 修改密码
   static const String resetPwdPage = '/resetPwd';
 

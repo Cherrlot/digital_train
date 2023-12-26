@@ -8,6 +8,8 @@ class Constants {
   static const String headUrl = 'headUrl';
   static const String userDepart = 'userDepart';
   static const String userPhone = 'userPhone';
+  /// 跳过的升级版本号
+  static const String skipVersion = 'skipVersion';
 
   /// 考试判断题类型
   static const String typeJudge = 'truefalse';

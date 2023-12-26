@@ -18,6 +18,7 @@ import '../pages/mine/advice_page.dart';
 import '../pages/mine/reset_pwd_page.dart';
 import '../pages/mine/setting_page.dart';
 import '../pages/mine/user_info_page.dart';
+import '../pages/mine/version_page.dart';
 import '../pages/pk/pk_detail.dart';
 import '../pages/pk/pk_page.dart';
 import '../pages/rank_page.dart';
@@ -53,4 +54,5 @@ final Map<String, WidgetBuilder> routesData = {
   RouteName.settingPage: (BuildContext context, {params}) =>  const SettingPage(),
   RouteName.resetPwdPage: (BuildContext context, {params}) =>  const ResetPwdPage(),
   RouteName.userInfoPage: (BuildContext context, {params}) =>  const UserInfoPage(),
+  RouteName.versionPage: (BuildContext context, {params}) =>  const VersionPage(),
 };

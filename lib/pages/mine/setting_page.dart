@@ -33,8 +33,7 @@ class _SettingPageState extends State<SettingPage> {
   _getVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _version = packageInfo.version;
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -52,16 +51,19 @@ class _SettingPageState extends State<SettingPage> {
                   decoration:
                       BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                   child: _resetPwd()),
-              SizedBox(height: 15.w,),
+              SizedBox(
+                height: 15.w,
+              ),
               Container(
                   padding: EdgeInsets.all(15.w),
                   decoration:
                       BoxDecoration(color: ColorConstant.white, borderRadius: BorderRadius.all(Radius.circular(10.w))),
                   child: _versionWidget()),
-              SizedBox(
-                height: 488.w,
-              ),
-              _button(),
+              Expanded(
+                  child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _button(),
+              ))
             ],
           )),
     );
@@ -157,7 +159,7 @@ class _SettingPageState extends State<SettingPage> {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           // 版本信息
-          Navigator.of(context).pushNamed(RouteName.resetPwdPage);
+          Navigator.of(context).pushNamed(RouteName.versionPage);
         },
         child: Row(
           children: [
@@ -170,7 +172,7 @@ class _SettingPageState extends State<SettingPage> {
               width: 8.w,
             ),
             Text(
-              _version?? StringConstant.versionInfo,
+              _version ?? StringConstant.versionInfo,
               maxLines: 1,
               style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333, fontWeight: FontWeight.w500),
             ),

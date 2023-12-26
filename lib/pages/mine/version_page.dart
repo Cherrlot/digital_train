@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:digital_train/util/string_constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:ota_update/ota_update.dart';
@@ -13,67 +11,40 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../main.dart';
-import '../../model/lesson_entity.dart';
-import '../../model/user_info_entity.dart';
 import '../../model/version_entity.dart';
 import '../../net/url_cons.dart';
 import '../../util/color_constant.dart';
-import '../../util/constant.dart';
-import '../../util/sp_util.dart';
+import '../../util/string_constant.dart';
 import '../../util/util.dart';
-import 'home_page.dart';
-import '../mine/mine_page.dart';
 
-/// 首页导航
-class HomeNavigationPage extends StatefulWidget {
-  const HomeNavigationPage({super.key});
+/// 版本信息
+class VersionPage extends StatefulWidget {
+  const VersionPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MyHomeNavigationPageState();
+  State<StatefulWidget> createState() => _VersionPageState();
 }
 
-class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
-  DateTime? _dateTime;
-  int _bottomNavigationIndex = 0; //底部导航的索引
-  late StreamSubscription<LessonEntity> _sub;
-
+class _VersionPageState extends State<VersionPage> {
+  late String version;
+  String? url;
+  String? content;
+  bool hasNew = false;
   String? progress = '';
   StateSetter? aState;
 
   @override
-  Widget build(BuildContext context) {
-    return PopScope(
-        canPop: false,
-        onPopInvoked: (didPop) {
-          if (_dateTime == null || DateTime.now().difference(_dateTime!) > const Duration(seconds: 2)) {
-            BotToast.showText(text: StringConstant.exit);
-            _dateTime = DateTime.now();
-          } else {
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          }
-        },
-        child: Scaffold(
-            body: pages[_bottomNavigationIndex], //页面切换
-            bottomNavigationBar: _bottomNavigationBar() //底部导航
-            ));
-  }
-
-  @override
   void initState() {
     super.initState();
-    //检查更新
     _checkUpdate();
-
-    _getUserInfo();
-    _sub = eventBus.on<LessonEntity>().listen((event) {
-      _updateStudyTime(event);
-    });
   }
 
   void _checkUpdate() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
+
+    setState(() {
+      version = packageInfo.version;
+    });
 
     var appResponse = await get<VersionEntity, List<VersionEntity>?>(versionCheck,
         decodeType: VersionEntity(), queryParameters: {"key": 'app.version'});
@@ -82,11 +53,12 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
       if (data != null) {
         var values = data.values;
         var netVersion = values.version;
-        // 上次检查更新跳过的版本号
-        var skipVersion = SpUtil.getString(Constants.skipVersion);
         setState(() {
-          if (Util.haveNewVersion(netVersion, version) && skipVersion != netVersion) {
-            _updateDialog(values.update, values.url, netVersion);
+          url = values.url;
+          content = values.update;
+          if (Util.haveNewVersion(netVersion, version)) {
+            // 有新版本
+            hasNew = true;
           }
         });
       }
@@ -95,7 +67,75 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
     });
   }
 
-  _updateDialog(String content, String downloadUrl, String version) {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: _appBar(),
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(15.w),
+          decoration: const BoxDecoration(color: ColorConstant.backColor),
+          child: Column(children: [
+            Text(
+              StringConstant.nowVersion,
+              maxLines: 1,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color666666),
+            ),
+            SizedBox(
+              height: 10.w,
+            ),
+            Text(
+              version,
+              maxLines: 1,
+              style: TextStyle(fontSize: 14.sp, color: ColorConstant.color333333),
+            ),
+            SizedBox(
+              height: 24.w,
+            ),
+            Text(
+              content ?? '',
+              style: TextStyle(fontSize: 16.sp, color: ColorConstant.color333333),
+            ),
+            SizedBox(
+              height: 56.w,
+            ),
+            Expanded(
+                child: Align(
+              alignment: Alignment.bottomCenter,
+              child: _button(),
+            ))
+          ]),
+        ));
+  }
+
+  Widget _button() {
+    return IgnorePointer(
+        ignoring: hasNew ? false : true,
+        child: ElevatedButton(
+          onPressed: () {
+            // 版本更新
+            _updateDialog(content, url);
+          },
+          style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all(Size(double.infinity, 40.w)),
+              backgroundColor: MaterialStateProperty.all(hasNew ? ColorConstant.color3C94FD : ColorConstant.dividerColor),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(80.w),
+              ))),
+          child: Text(
+            hasNew ? StringConstant.updateNow : StringConstant.versionLatest,
+            style: TextStyle(fontSize: 18.sp, color: hasNew ? ColorConstant.white : ColorConstant.mainTextColor),
+          ),
+        ));
+  }
+
+  _updateDialog(String? content, String? downloadUrl) {
     Dialogs.materialDialog(
       context: context,
       title: StringConstant.updateApp,
@@ -106,7 +146,7 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
             // 更新软件
             Navigator.of(context).pop();
             _downloadDialog();
-            _update(downloadUrl);
+            _update(downloadUrl ?? '');
           },
           text: StringConstant.startUpdate,
           color: ColorConstant.color3C94FD,
@@ -114,8 +154,6 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
         ),
         IconsOutlineButton(
           onPressed: () {
-            // 取消, 跳过当前版本更新
-            SpUtil.setString(Constants.skipVersion, version);
             Navigator.of(context).pop();
           },
           text: StringConstant.cancel,
@@ -190,68 +228,20 @@ class _MyHomeNavigationPageState extends State<HomeNavigationPage> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _sub.cancel();
-  }
-
-  _updateStudyTime(LessonEntity data) async {
-    await post<VersionEntity, VersionEntity?>(studyTime,
-        decodeType: VersionEntity(), data: {"courseId": data.iD, "duration": data.duration});
-  }
-
-  _getUserInfo() async {
-    var appResponse =
-        await get<UserInfoEntity, List<UserInfoEntity>?>(userInfo, decodeType: UserInfoEntity(), data: {"ID": 0});
-    appResponse.when(
-        success: (List<UserInfoEntity>? model) {
-          var userInfo = model?[0];
-          if (userInfo != null) {
-            SpUtil.setString(Constants.headUrl, userInfo.headImage ?? '');
-            SpUtil.setString(Constants.userName, userInfo.name ?? '');
-            SpUtil.setString(Constants.userPhone, userInfo.phone ?? '');
-            SpUtil.setString(Constants.nickName, userInfo.nickname ?? '');
-          }
+  AppBar _appBar() {
+    return AppBar(
+      leading: BackButton(
+        onPressed: () {
+          Navigator.pop(context);
         },
-        failure: (String msg, int code) {});
-  }
-
-  //底部导航-样式
-  BottomNavigationBar _bottomNavigationBar() {
-    return BottomNavigationBar(
-      items: items(),
-      //底部导航-图标和文字的定义，封装到函数里
-      currentIndex: _bottomNavigationIndex,
-      onTap: (flag) {
-        setState(() {
-          _bottomNavigationIndex = flag; //使用底部导航索引
-        });
-      },
-      //onTap 点击切换页面
-      fixedColor: Colors.blue,
-      //样式：图标选中时的颜色：蓝色
-      type: BottomNavigationBarType.fixed, //样式：选中图标后的样式是固定的
+      ),
+      title: const Text(
+        StringConstant.versionInfo,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      centerTitle: true,
     );
   }
-}
-
-//底部导航页-切换页面
-final pages = [
-  const HomePage(), //首页
-  const MinePage(), //我的
-];
-
-//底部导航-图标和文字定义
-List<BottomNavigationBarItem> items() {
-  return [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: '首页',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: '我的',
-    ),
-  ];
 }

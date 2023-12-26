@@ -86,6 +86,12 @@ class StringConstant {
   static const String updatePermission = "没有必要的权限，请赋予权限后再试";
   static const String updateApp = "发现新版本";
   static const String versionInfo = "版本信息";
+  static const String versionCheck = "检查更新";
+  static const String versionLatest = "已是最新版本";
+  static const String updateNow = "立即更新";
+  static const String downloading = "正在下载： ";
+  static const String nowVersion = "当前版本";
+  static const String startUpdate = "开始更新";
 
 
 }

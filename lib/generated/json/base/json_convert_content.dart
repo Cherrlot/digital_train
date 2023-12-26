@@ -18,6 +18,7 @@ import 'package:digital_train/model/test_result_entity.dart';
 import 'package:digital_train/model/test_topic_entity.dart';
 import 'package:digital_train/model/upload_image_entity.dart';
 import 'package:digital_train/model/user_info_entity.dart';
+import 'package:digital_train/model/version_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 
@@ -190,6 +191,12 @@ class JsonConvert {
     if (<UserInfoEntity>[] is M) {
       return data.map<UserInfoEntity>((Map<String, dynamic> e) => UserInfoEntity.fromJson(e)).toList() as M;
     }
+    if (<VersionEntity>[] is M) {
+      return data.map<VersionEntity>((Map<String, dynamic> e) => VersionEntity.fromJson(e)).toList() as M;
+    }
+    if (<VersionValues>[] is M) {
+      return data.map<VersionValues>((Map<String, dynamic> e) => VersionValues.fromJson(e)).toList() as M;
+    }
 
     debugPrint("$M not found");
 
@@ -228,6 +235,8 @@ class JsonConvertClassCollection {
     (TestTopicItemsOption).toString(): TestTopicItemsOption.fromJson,
     (UploadImageEntity).toString(): UploadImageEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
+    (VersionEntity).toString(): VersionEntity.fromJson,
+    (VersionValues).toString(): VersionValues.fromJson,
   };
 
   bool containsKey(String type) {

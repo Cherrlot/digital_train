@@ -38,5 +38,7 @@ const studyTimeRank = 'api/member/course/get';
 const studyMapRank = 'api/member/user/get';
 /// pk
 const pkList = 'api/member/ranking/get';
+/// 检查更新
+const versionCheck = 'api/system/config/get';
 
 
