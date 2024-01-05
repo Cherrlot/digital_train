@@ -73,7 +73,6 @@ class TestTopicItemsBank extends BaseNetModel {
   late String category;
   late int scores;
   late String typeId;
-  late String type;
   late List<String> selections;
   late List<TestTopicItemsOption> options;
 
@@ -90,7 +89,6 @@ class TestTopicItemsBank extends BaseNetModel {
       String? category,
       int? scores,
       String? typeId,
-      String? type,
         List<String>? selections,
       List<TestTopicItemsOption>? options})
       : iD = iD ?? '',
@@ -99,7 +97,6 @@ class TestTopicItemsBank extends BaseNetModel {
         answer = answer ?? '',
         category = category ?? '',
         scores = scores ?? 0,
-        type = type ?? '',
         selections = selections ?? [],
         options = options ?? [],
         typeId = typeId ?? '';

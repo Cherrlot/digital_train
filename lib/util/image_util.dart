@@ -62,8 +62,8 @@ class ImageUtil {
     return croppedFile;
   }
 
-  /// 获取网络图片地址
-  static String getNetImageUrl(String? imagePath) {
+  /// 获取网络地址
+  static String getFullNetUrl(String? imagePath) {
     if(imagePath == null || !imagePath.contains('.')) {
       return '';
     }

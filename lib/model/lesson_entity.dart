@@ -13,7 +13,7 @@ class LessonEntity extends BaseNetModel {
   late String descr;
   late String teacher;
   late String cover;
-  late String vedio;
+  late String video;
   late int duration;
   late String typeId;
 
@@ -28,7 +28,7 @@ class LessonEntity extends BaseNetModel {
       String? descr,
       String? teacher,
       String? cover,
-      String? vedio,
+      String? video,
       int? duration,
       String? typeId})
       : iD = iD ?? '',
@@ -36,7 +36,7 @@ class LessonEntity extends BaseNetModel {
         descr = descr ?? '',
         teacher = teacher ?? '',
         cover = cover ?? '',
-        vedio = vedio ?? '',
+        video = video ?? '',
         duration = duration ?? 0,
         typeId = typeId ?? '';
 

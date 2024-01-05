@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       List<String> titleList = List.empty(growable: true); //标题集合
       _bannerList.addAll(model ?? []);
       for (var element in model ?? []) {
-        imageList.add(ImageUtil.getNetImageUrl(element.image));
+        imageList.add(ImageUtil.getFullNetUrl(element.image));
         titleList.add(element.title ?? '');
       }
       setState(() {

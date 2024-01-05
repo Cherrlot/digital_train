@@ -18,7 +18,7 @@ class Constants {
   static const String typeRadio = 'radio';
 
   /// 考试多选题类型
-  static const String typeCheck = 'checkbox';
+  static const String typeCheck = 'check';
 
 
   static const Color successBgColor = Color.fromRGBO(202, 237, 220, 1);

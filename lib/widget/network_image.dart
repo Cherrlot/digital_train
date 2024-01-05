@@ -19,7 +19,7 @@ class NetworkImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       cacheManager: CustomCacheManager.instance,
-      imageUrl: ImageUtil.getNetImageUrl(imageUrl),
+      imageUrl: ImageUtil.getFullNetUrl(imageUrl),
       placeholder: (context, url) => _defaultImage(),
       errorWidget: (context, url, error) => _defaultImage(),
       width: width,

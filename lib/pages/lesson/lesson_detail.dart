@@ -34,7 +34,7 @@ class _LessonDetailPageState extends State<LessonDetailPage> with AutomaticKeepA
     _data = widget.params["param"];
     setState(() {
       _title = _data.title;
-      _url = ImageUtil.getNetImageUrl(_data.vedio);
+      _url = ImageUtil.getFullNetUrl(_data.video);
     });
   }
 

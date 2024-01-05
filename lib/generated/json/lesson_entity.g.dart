@@ -27,7 +27,7 @@ LessonEntity $LessonEntityFromJson(Map<String, dynamic> json) {
   }
   final String? vedio = jsonConvert.convert<String>(json['vedio']);
   if (vedio != null) {
-    lessonEntity.vedio = vedio;
+    lessonEntity.video = vedio;
   }
   final int? duration = jsonConvert.convert<int>(json['duration']);
   if (duration != null) {
@@ -47,7 +47,7 @@ Map<String, dynamic> $LessonEntityToJson(LessonEntity entity) {
   data['descr'] = entity.descr;
   data['teacher'] = entity.teacher;
   data['cover'] = entity.cover;
-  data['vedio'] = entity.vedio;
+  data['vedio'] = entity.video;
   data['duration'] = entity.duration;
   data['typeId'] = entity.typeId;
   return data;
@@ -70,7 +70,7 @@ extension LessonEntityExtension on LessonEntity {
       ..descr = descr ?? this.descr
       ..teacher = teacher ?? this.teacher
       ..cover = cover ?? this.cover
-      ..vedio = vedio ?? this.vedio
+      ..video = vedio ?? this.video
       ..duration = duration ?? this.duration
       ..typeId = typeId ?? this.typeId;
   }

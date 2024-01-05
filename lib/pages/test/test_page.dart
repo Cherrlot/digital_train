@@ -39,7 +39,7 @@ class _TestPageState extends State<TestPage> {
           if(bank == null) {
             return;
           }
-          if(bank.type == Constants.typeCheck) {
+          if(bank.category == Constants.typeCheck) {
             // 多选
             if(bank.selections.contains(value)) {
               bank.selections.remove(value);
@@ -86,9 +86,7 @@ class _TestPageState extends State<TestPage> {
       var bank = element.bank;
       var input = bank.input;
       var decode = jsonDecode(input);
-      var type = decode['type'];
-      bank.type = type;
-      var list = decode['options'] as List;
+      var list = decode as List;
       List<TestTopicItemsOption> options = [];
       for (var option in list) {
         var temp = TestTopicItemsOption();
@@ -170,9 +168,9 @@ class _TestPageState extends State<TestPage> {
       }
 
       var answer = element.bank.answer;
-      var type = element.bank.type;
+      var category = element.bank.category;
       var score = element.bank.scores;
-      if(type == Constants.typeCheck) {
+      if(category == Constants.typeCheck) {
         // 多选
         List<String> answerList = answer.split(',');
         if(answerList.length == selection.length) {
@@ -427,7 +425,7 @@ class _TestPageState extends State<TestPage> {
   String _getTopicType() {
     var result = StringConstant.testJudge;
     if (selectTest?.bank.category != Constants.typeJudge) {
-      if (selectTest?.bank.type == Constants.typeCheck) {
+      if (selectTest?.bank.category == Constants.typeCheck) {
         result = StringConstant.testNulChoose;
       } else {
         result = StringConstant.testChoose;

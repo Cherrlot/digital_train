@@ -196,7 +196,7 @@ class _LessonPageState extends State<LessonPage> {
                   height: 58.w,
                   width: 79.w,
                   fit: BoxFit.cover,
-                  imageUrl: data.descr,
+                  imageUrl: data.cover,
                   defaultImage: ImageConstant.imageLessonDefault,
                 )),
             SizedBox(
