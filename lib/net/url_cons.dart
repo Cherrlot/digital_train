@@ -29,7 +29,7 @@ const testGet = 'api/course/paper/get';
 /// 交卷
 const testCreate = 'api/member/exam/create';
 /// 知识库
-const knowledgeList = 'api/course/tag/get';
+const knowledgeList = 'api/course/knowledge/get';
 /// 学习时长
 const studyTime = 'api/member/course/create';
 /// 学习排行榜

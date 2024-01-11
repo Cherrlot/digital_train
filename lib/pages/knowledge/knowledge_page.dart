@@ -42,12 +42,12 @@ class _KnowledgePageState extends State<KnowledgePage> {
     if(showLoading) {
       cancel = BotToast.showLoading(backButtonBehavior: BackButtonBehavior.close);
     }
-    var appResponse = await get<KnowledgeEntity, List<KnowledgeEntity>?>(knowledgeList,
-        decodeType: KnowledgeEntity(), queryParameters: {"name": search});
-    appResponse.when(success: (List<KnowledgeEntity>? model) {
+    var appResponse = await get<KnowledgeArticles, List<KnowledgeArticles>?>(knowledgeList,
+        decodeType: KnowledgeArticles(), queryParameters: {"tags": search});
+    appResponse.when(success: (List<KnowledgeArticles>? model) {
       if(model != null && model.isNotEmpty) {
-        var data = model[0];
-        _knowledgeList.addAll(data.articles);
+        // var data = model[0];
+        _knowledgeList.addAll(model);
       }
       setState(() {
       });

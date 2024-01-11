@@ -197,6 +197,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.of(context).pushNamed(RouteName.lessonDetailPage, arguments: {"param": data});
             },
             child: NetworkImageWidget(
+              height: 105.w,
               fit: BoxFit.cover,
               imageUrl: data.cover,
               defaultImage: ImageConstant.imageLessonDefault,

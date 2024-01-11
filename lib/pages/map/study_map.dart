@@ -58,6 +58,8 @@ class _StudyMapPageState extends State<StudyMapPage> {
         } else {
           topicNum = 0;
         }
+        debugPrint("levelNum: $levelNum");
+        debugPrint("topicNum: $topicNum");
         // 将listview滚动到底部
         Future.delayed(const Duration(milliseconds: 500), () {
           scrollController.animateTo(scrollController.position.maxScrollExtent,
