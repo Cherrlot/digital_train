@@ -29,6 +29,7 @@ class _VersionPageState extends State<VersionPage> {
   late String version;
   String? url;
   String? content;
+  String? _newVersion;
   bool hasNew = false;
   String? progress = '';
   StateSetter? aState;
@@ -59,6 +60,7 @@ class _VersionPageState extends State<VersionPage> {
           if (Util.haveNewVersion(netVersion, version)) {
             // 有新版本
             hasNew = true;
+            _newVersion = netVersion;
           }
         });
       }
@@ -138,7 +140,7 @@ class _VersionPageState extends State<VersionPage> {
   _updateDialog(String? content, String? downloadUrl) {
     Dialogs.materialDialog(
       context: context,
-      title: StringConstant.updateApp,
+      title: '${StringConstant.updateApp}: $_newVersion',
       msg: content,
       actions: [
         IconsOutlineButton(
